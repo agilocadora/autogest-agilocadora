@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Controle de Reajustes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F7FA;color:#1C1C1E;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid rgba(0,0,0,0.08);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:18px;font-weight:600;color:#1C1C1E}
+.header-date{font-size:13px;color:#6E6E73}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,0.08);padding:16px;text-align:center}
+.kpi-label{font-size:12px;color:#6E6E73;margin-bottom:8px}
+.kpi-val{font-size:26px;font-weight:600}
+.kpi-val.red{color:#A32D2D}
+.kpi-val.amber{color:#854F0B}
+.kpi-val.blue{color:#185FA5}
+.kpi-val.green{color:#3B6D11}
+.section-title{font-size:11px;font-weight:600;color:#6E6E73;text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px}
+.alert-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.alert-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1px solid}
+.alert-row.vencido{background:#FCEBEB;border-color:#F7C1C1}
+.alert-row.urgente{background:#FAEEDA;border-color:#FAC775}
+.alert-info{flex:1;min-width:0}
+.alert-cliente{font-size:13px;font-weight:600;color:#1C1C1E}
+.alert-detalhe{font-size:12px;color:#6E6E73;margin-top:3px}
+.alert-badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.badge-vencido{background:#F09595;color:#501313}
+.badge-urgente{background:#FAC775;color:#412402}
+.controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.controls input,.controls select{padding:8px 14px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);font-size:13px;background:#fff;color:#1C1C1E;outline:none}
+.controls input{flex:1;min-width:200px}
+.controls input:focus,.controls select:focus{border-color:#185FA5}
+.client-block{margin-bottom:14px;background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;overflow:hidden}
+.client-header{padding:11px 16px;background:#F7F7FA;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,0.06)}
+.client-count{font-size:12px;color:#6E6E73;font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:8px 14px;text-align:left;font-weight:600;font-size:11px;color:#6E6E73;text-transform:uppercase;letter-spacing:.04em;background:#FAFAFA;border-bottom:1px solid rgba(0,0,0,0.06)}
+td{padding:10px 14px;border-bottom:1px solid rgba(0,0,0,0.05);color:#1C1C1E}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F7F7FA}
+.pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pill-vencido{background:#FCEBEB;color:#A32D2D}
+.pill-urgente{background:#FAEEDA;color:#854F0B}
+.pill-ok{background:#EAF3DE;color:#3B6D11}
+.pill-mensal{background:#E6F1FB;color:#185FA5}
+.val-atual{font-weight:600}
+.val-ant{font-size:12px;color:#6E6E73}
+.mono{font-family:'SF Mono',monospace;font-size:12px}
+.empty{font-size:13px;color:#6E6E73;padding:16px 0}
+@media(max-width:768px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .header h1{font-size:15px}
+  th,td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><i class="ti ti-refresh-alert" style="vertical-align:-2px;margin-right:8px;color:#185FA5"></i>Controle de Reajustes</h1>
+  <div class="header-date" id="hoje"></div>
+</div>
+
+<div class="container">
+  <div class="kpis" id="kpis"></div>
+
+  <div class="section-title">alertas de reajuste</div>
+  <div class="alert-list" id="alerts"></div>
+
+  <div class="section-title" style="margin-top:20px">todos os contratos</div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Buscar cliente, placa ou carro...">
+    <select id="filterStatus">
+      <option value="">Todos os status</option>
+      <option value="vencido">Vencido</option>
+      <option value="urgente">Vence em 30 dias</option>
+      <option value="ok">Em dia</option>
+      <option value="mensal">Mensal</option>
+    </select>
+  </div>
+  <div id="table-area"></div>
+</div>
+
+<script>
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+
+document.getElementById('hoje').textContent = TODAY.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+
+function exDate(s){
+  if(!s) return null;
+  const d = new Date((s - 25569) * 86400000);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function fmtDate(d){ return d ? d.toLocaleDateString('pt-BR') : '—'; }
+function fmtBRL(v){ return 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function diffDias(d){ if(!d) return null; return Math.round((d - TODAY) / 86400000); }
+
+function getStatus(c){
+  if(c.tipo === 'mensal') return 'mensal';
+  if(!c.vencimento) return 'ok';
+  const d = diffDias(c.vencimento);
+  if(d < 0) return 'vencido';
+  if(d <= 30) return 'urgente';
+  return 'ok';
+}
+
+const RAW = [
+  {cliente:'ABCP',carro:'Saveiro',placa:'STX1B03',valor_ant:3300,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:3467},
+  {cliente:'ABCP',carro:'Saveiro',placa:'SVM4H38',valor_ant:3300,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:3467},
+  {cliente:'ABCP',carro:'Onix',placa:'STF1A64',valor_ant:2200,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:2311},
+  {cliente:'ABCP',carro:'Cronos',placa:'SWB8C17',valor_ant:2350,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:2469},
+  {cliente:'Carlos Aiello',carro:'208',placa:'GDF2A43',valor_ant:2205,dt_reaj:exDate(45964),vencimento:null,tipo:'mensal',valor:2315},
+  {cliente:'Cassio Ribeiro',carro:'Mobi',placa:'SUO7I58',valor_ant:2177.4,dt_reaj:exDate(45782),vencimento:null,tipo:'mensal',valor:2286},
+  {cliente:'CD Mantem',carro:'Kwid',placa:'SVA9G97',valor_ant:2177.4,dt_reaj:exDate(45786),vencimento:null,tipo:'mensal',valor:2286},
+  {cliente:'Consórcio',carro:'HB20',placa:'FCE1F62',valor_ant:2530,dt_reaj:null,vencimento:exDate(46197),tipo:'3 meses',valor:2530},
+  {cliente:'Consórcio',carro:'Polo',placa:'TLF9F76',valor_ant:2500,dt_reaj:null,vencimento:exDate(46250),tipo:'5 meses',valor:2493.30},
+  {cliente:'Consórcio',carro:'Cronos',placa:'FSD1F83',valor_ant:3100,dt_reaj:null,vencimento:exDate(46343),tipo:'12 meses',valor:3100},
+  {cliente:'Consórcio',carro:'Argo',placa:'UDO2F61',valor_ant:2496.80,dt_reaj:null,vencimento:exDate(46252),tipo:'12 meses',valor:2496.80},
+  {cliente:'Consórcio',carro:'Argo',placa:'TJN9H37',valor_ant:3100,dt_reaj:null,vencimento:exDate(46340),tipo:'12 meses',valor:3100},
+  {cliente:'Consórcio',carro:'Polo',placa:'UGK8E58',valor_ant:3100,dt_reaj:null,vencimento:exDate(46280),tipo:'12 meses',valor:3100},
+  {cliente:'Consórcio',carro:'Onix',placa:'SVH0G37',valor_ant:2500,dt_reaj:null,vencimento:exDate(46213),tipo:'4 meses',valor:2500},
+  {cliente:'DB Construções',carro:'Gol',placa:'FKG5J21',valor_ant:2374.80,dt_reaj:exDate(45971),vencimento:null,tipo:'mensal',valor:2493.30},
+  {cliente:'DB Construções',carro:'Mobi',placa:'TKE2F18',valor_ant:2286,dt_reaj:null,vencimento:null,tipo:'mensal',valor:2286},
+  {cliente:'Engemat',carro:'Saveiro',placa:'TIP2B77',valor_ant:3000,dt_reaj:null,vencimento:exDate(46171),tipo:'12 meses',valor:3000},
+  {cliente:'Engemat',carro:'Polo',placa:'SVS4J56',valor_ant:2500,dt_reaj:null,vencimento:exDate(46170),tipo:'12 meses',valor:2500},
+  {cliente:'Engemat',carro:'Onix',placa:'STQ7H86',valor_ant:2500,dt_reaj:null,vencimento:null,tipo:'mensal',valor:2500},
+  {cliente:'Full',carro:'HB20',placa:'UES5D91',valor_ant:2023,dt_reaj:exDate(45968),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'Full',carro:'Argo',placa:'SVV5F23',valor_ant:2023,dt_reaj:exDate(45968),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'Full',carro:'HB20',placa:'STT4F78',valor_ant:2023,dt_reaj:exDate(45968),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'Full',carro:'Argo',placa:'SVE0A86',valor_ant:2023,dt_reaj:exDate(45968),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'JS Soluções',carro:'Gol',placa:'FNN4D51',valor_ant:2450,dt_reaj:null,vencimento:exDate(46130),tipo:'12 meses',valor:2450},
+  {cliente:'Kablan',carro:'Kwid',placa:'GEY6J43',valor_ant:2286,dt_reaj:null,vencimento:exDate(46210),tipo:'3 meses',valor:2286},
+  {cliente:'Kablan',carro:'Polo',placa:'SWV1J01',valor_ant:2374.80,dt_reaj:exDate(46364),vencimento:exDate(46391),tipo:'12 meses',valor:2500},
+  {cliente:'Kablan',carro:'Polo',placa:'STO3C57',valor_ant:2450,dt_reaj:exDate(45825),vencimento:exDate(46247),tipo:'12 meses',valor:2500},
+  {cliente:'Kablan',carro:'Polo',placa:'TLS6G21',valor_ant:2500,dt_reaj:null,vencimento:exDate(46247),tipo:'12 meses',valor:2500},
+  {cliente:'Kablan',carro:'Argo',placa:'SWO2D85',valor_ant:2450,dt_reaj:exDate(45861),vencimento:exDate(46291),tipo:'12 meses',valor:2500},
+  {cliente:'Kablan',carro:'Mobi',placa:'TKA6I74',valor_ant:2374.80,dt_reaj:exDate(45999),vencimento:exDate(46390),tipo:'12 meses',valor:2500},
+  {cliente:'M.A.S',carro:'Mobi',placa:'TIS9C37',valor_ant:2150,dt_reaj:exDate(46101),vencimento:exDate(46253),tipo:'6 meses',valor:2253},
+  {cliente:'Michelle',carro:'HB20',placa:'ERX6F87',valor_ant:2374.80,dt_reaj:exDate(45878),vencimento:null,tipo:'mensal',valor:2493.80},
+  {cliente:'Pediatrics',carro:'Fiorino',placa:'FPF6H35',valor_ant:3023,dt_reaj:exDate(45824),vencimento:null,tipo:'mensal',valor:3390},
+  {cliente:'Pediatrics',carro:'Fiorino',placa:'FDF9E43',valor_ant:3023,dt_reaj:exDate(45824),vencimento:null,tipo:'mensal',valor:3390},
+  {cliente:'Pediatrics',carro:'Fiorino',placa:'FSB4H57',valor_ant:3023,dt_reaj:exDate(45824),vencimento:null,tipo:'mensal',valor:3390},
+  {cliente:'Pediatrics',carro:'Cronos',placa:'CSJ0H31',valor_ant:2261,dt_reaj:exDate(45824),vencimento:null,tipo:'mensal',valor:2466.90},
+  {cliente:'Sisvetor',carro:'Polo',placa:'QNS9A76',valor_ant:2177,dt_reaj:exDate(45987),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'Sisvetor',carro:'Argo',placa:'UES3H77',valor_ant:2177,dt_reaj:exDate(45987),vencimento:null,tipo:'mensal',valor:2307},
+  {cliente:'Valéria Pinto Cruz',carro:'Mobi',placa:'SVT5H94',valor_ant:2177.4,dt_reaj:exDate(45971),vencimento:null,tipo:'mensal',valor:2286},
+  {cliente:'Zcon',carro:'Argo',placa:'GIX9J42',valor_ant:2846,dt_reaj:exDate(45950),vencimento:null,tipo:'mensal',valor:3016},
+];
+
+function render(){
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const fs = document.getElementById('filterStatus').value;
+  const data = RAW.filter(c => {
+    const st = getStatus(c);
+    if(fs && st !== fs) return false;
+    if(q && !(c.cliente.toLowerCase().includes(q) || c.placa.toLowerCase().includes(q) || c.carro.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const vencidos = RAW.filter(c => getStatus(c) === 'vencido');
+  const urgentes = RAW.filter(c => getStatus(c) === 'urgente');
+  const mensais  = RAW.filter(c => getStatus(c) === 'mensal');
+  const emDia    = RAW.filter(c => getStatus(c) === 'ok');
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><div class="kpi-label">Total de veículos</div><div class="kpi-val blue">${RAW.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Reajustes vencidos</div><div class="kpi-val red">${vencidos.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Vencem em 30 dias</div><div class="kpi-val amber">${urgentes.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Em dia</div><div class="kpi-val green">${emDia.length}</div></div>
+  `;
+
+  const alertsData = [
+    ...vencidos.map(c => ({...c, st:'vencido', dias:diffDias(c.vencimento)})),
+    ...urgentes.map(c => ({...c, st:'urgente', dias:diffDias(c.vencimento)})),
+  ].sort((a,b) => a.dias - b.dias);
+
+  document.getElementById('alerts').innerHTML = alertsData.length ? alertsData.map(c => `
+    <div class="alert-row ${c.st}">
+      <i class="ti ${c.st==='vencido'?'ti-alert-triangle':'ti-clock'}" style="font-size:20px;flex-shrink:0;color:${c.st==='vencido'?'#A32D2D':'#854F0B'}"></i>
+      <div class="alert-info">
+        <div class="alert-cliente">${c.cliente} — ${c.carro} <span style="font-weight:400;opacity:.65">${c.placa}</span></div>
+        <div class="alert-detalhe">Vencimento: ${fmtDate(c.vencimento)} · Valor atual: ${fmtBRL(c.valor)} · ${c.tipo}</div>
+      </div>
+      <span class="alert-badge badge-${c.st}">${c.st==='vencido' ? Math.abs(c.dias)+' dias em atraso' : c.dias+' dias restantes'}</span>
+    </div>
+  `).join('') : '<div class="empty"><i class="ti ti-circle-check" style="color:#3B6D11;vertical-align:-2px;margin-right:6px"></i>Nenhum alerta de vencimento no momento.</div>';
+
+  const byClient = {};
+  data.forEach(c => {
+    if(!byClient[c.cliente]) byClient[c.cliente] = [];
+    byClient[c.cliente].push(c);
+  });
+
+  const area = document.getElementById('table-area');
+  if(!data.length){ area.innerHTML = '<div class="empty">Nenhum contrato encontrado.</div>'; return; }
+
+  area.innerHTML = Object.entries(byClient).map(([cl, rows]) => `
+    <div class="client-block">
+      <div class="client-header">
+        <span>${cl}</span>
+        <span class="client-count">${rows.length} veículo${rows.length > 1 ? 's' : ''}</span>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Carro</th><th>Placa</th><th>Tipo</th>
+          <th>Último reajuste</th><th>Próx. vencimento</th>
+          <th>Valor anterior</th><th>Valor atual</th><th>Status</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map(c => {
+            const st = getStatus(c);
+            const pill = st==='vencido'?'pill-vencido':st==='urgente'?'pill-urgente':st==='mensal'?'pill-mensal':'pill-ok';
+            const label = st==='vencido'?'Vencido':st==='urgente'?'Atenção':st==='mensal'?'Mensal':'Em dia';
+            const dias = diffDias(c.vencimento);
+            const diasTxt = dias !== null ? (dias < 0 ? ' ('+Math.abs(dias)+'d atraso)' : dias <= 30 ? ' ('+dias+'d)' : '') : '';
+            return `<tr>
+              <td>${c.carro}</td>
+              <td class="mono">${c.placa}</td>
+              <td>${c.tipo}</td>
+              <td>${fmtDate(c.dt_reaj)}</td>
+              <td>${fmtDate(c.vencimento)}${diasTxt ? '<span style="font-size:11px;color:#854F0B;margin-left:4px">'+diasTxt+'</span>' : ''}</td>
+              <td class="val-ant">${fmtBRL(c.valor_ant)}</td>
+              <td class="val-atual">${fmtBRL(c.valor)}</td>
+              <td><span class="pill ${pill}">${label}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `).join('');
+}
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filterStatus').addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
