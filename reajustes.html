@@ -4,131 +4,481 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Controle de Reajustes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
 <style>
-:root{
-  --bg:#F2F2F7;--card:#fff;--border:rgba(0,0,0,0.09);--text:#1C1C1E;--sub:#6E6E73;
-  --blue:#007AFF;--blue-bg:#EAF3FF;--blue-text:#004DB3;
-  --red:#FF3B30;--red-bg:#FFF0EF;--red-text:#8B0000;
-  --amber:#FF9500;--amber-bg:#FFF8EC;--amber-text:#7A4500;
-  --green:#34C759;--green-bg:#EDFAF2;--green-text:#1A5C2E;
-  --purple:#AF52DE;--radius:12px;--radiuslg:16px;
+:root {
+  --bg: #F7F7F8;
+  --card: #FFFFFF;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.14);
+  --text: #111111;
+  --sub: #777777;
+  --muted: #AAAAAA;
+  --blue: #2563EB;
+  --blue-light: #EFF6FF;
+  --blue-mid: #BFDBFE;
+  --red: #DC2626;
+  --red-light: #FEF2F2;
+  --red-mid: #FECACA;
+  --amber: #D97706;
+  --amber-light: #FFFBEB;
+  --amber-mid: #FDE68A;
+  --green: #059669;
+  --green-light: #ECFDF5;
+  --green-mid: #A7F3D0;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --r: 10px;
+  --rlg: 14px;
+  --rxl: 18px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.05);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.06);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-left{display:flex;align-items:center;gap:10px}
-.topbar-logo{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
-.topbar-title{font-size:15px;font-weight:600}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:opacity .15s,transform .1s}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{opacity:.88}
-.btn-ghost{background:transparent;color:var(--sub);border:1px solid var(--border)}
-.btn-ghost:hover{background:var(--bg)}
-.main{max-width:1280px;margin:0 auto;padding:24px 28px}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:14px}
-.kpi-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.kpi-icon.blue{background:var(--blue-bg);color:var(--blue)}
-.kpi-icon.red{background:var(--red-bg);color:var(--red)}
-.kpi-icon.amber{background:var(--amber-bg);color:var(--amber)}
-.kpi-icon.green{background:var(--green-bg);color:var(--green)}
-.kpi-icon.purple{background:#F5EEFF;color:var(--purple)}
-.kpi-val{font-size:22px;font-weight:700;line-height:1}
-.kpi-label{font-size:12px;color:var(--sub);margin-top:3px}
-.alerts-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radiuslg);overflow:hidden;margin-bottom:20px}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-header-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
-.alert-item{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid var(--border)}
-.alert-item:last-child{border-bottom:none}
-.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.dot-red{background:var(--red)}
-.dot-amber{background:var(--amber)}
-.alert-main{flex:1;min-width:0}
-.alert-name{font-size:13px;font-weight:600}
-.alert-sub{font-size:12px;color:var(--sub);margin-top:2px}
-.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
-.badge-red{background:var(--red-bg);color:var(--red-text)}
-.badge-amber{background:var(--amber-bg);color:var(--amber-text)}
-.badge-green{background:var(--green-bg);color:var(--green-text)}
-.badge-blue{background:var(--blue-bg);color:var(--blue-text)}
-.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radiuslg);overflow:hidden}
-.table-toolbar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.search-wrap{position:relative;flex:1;min-width:200px}
-.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:16px;pointer-events:none}
-.search-wrap input{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:10px;font-size:13px;background:var(--bg);color:var(--text);outline:none}
-.search-wrap input:focus{border-color:var(--blue);background:#fff}
-select.filter{padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;background:var(--bg);color:var(--text);outline:none;cursor:pointer}
-select.filter:focus{border-color:var(--blue)}
-.group{border-bottom:1px solid var(--border)}
-.group:last-child{border-bottom:none}
-.group-header{padding:11px 20px;background:#FAFAFA;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid var(--border)}
-.group-header:hover{background:#F5F5F5}
-.group-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
-.group-meta{display:flex;align-items:center;gap:10px}
-.group-count{font-size:12px;color:var(--sub)}
-.group-total{font-size:12px;font-weight:600}
-.chevron{font-size:14px;color:var(--sub);transition:transform .2s}
-.chevron.open{transform:rotate(180deg)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{padding:9px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;background:#FAFAFA;border-bottom:1px solid var(--border)}
-tbody td{padding:11px 16px;border-bottom:1px solid rgba(0,0,0,0.05);color:var(--text);vertical-align:middle}
-tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:#FAFAFA}
-.col-placa{font-family:'SF Mono',Menlo,monospace;font-size:12px;letter-spacing:.5px;color:var(--sub)}
-.col-val{font-weight:600}
-.col-valant{color:var(--sub);font-size:12px}
-.action-btn{background:none;border:none;cursor:pointer;padding:5px 7px;border-radius:7px;color:var(--sub);font-size:15px;transition:background .15s,color .15s}
-.action-btn:hover{background:var(--bg);color:var(--text)}
-.action-btn.del:hover{background:var(--red-bg);color:var(--red)}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.show{display:flex}
-.modal{background:var(--card);border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
-.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-size:17px;font-weight:700}
-.modal-close{background:none;border:none;cursor:pointer;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:18px}
-.modal-close:hover{background:var(--bg)}
-.modal-body{padding:20px 24px}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group.full{grid-column:1/-1}
-label{font-size:12px;font-weight:600;color:var(--sub)}
-input[type=text],input[type=number],input[type=date],select.form-select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
-input:focus,select.form-select:focus{border-color:var(--blue)}
-.section-label{font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px;padding:0 20px}
-.empty-state{padding:48px;text-align:center;color:var(--sub)}
-.empty-state i{font-size:40px;margin-bottom:12px;display:block;opacity:.3}
-.empty-state p{font-size:14px}
-.toast{position:fixed;bottom:24px;right:24px;background:#1C1C1E;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:500;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:8px}
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi:last-child{grid-column:1/-1}}
-@media(max-width:600px){.main{padding:16px}.form-grid{grid-template-columns:1fr}.topbar{padding:0 16px}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: 58px;
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-logo {
+  width: 34px; height: 34px;
+  background: var(--blue);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 17px;
+  box-shadow: 0 2px 8px rgba(37,99,235,.35);
+}
+.topbar-title { font-size: 15px; font-weight: 600; letter-spacing: -.02em; }
+.topbar-date { font-size: 12px; color: var(--sub); }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none;
+  transition: all .15s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 1px 3px rgba(37,99,235,.3); }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-ghost { background: transparent; color: var(--sub); border: 1px solid var(--border-strong); }
+.btn-ghost:hover { background: var(--bg); color: var(--text); }
+.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 7px; }
+.btn-cal { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+.btn-cal:hover { background: #d1fae5; }
+.btn-outlook { background: #f0f4ff; color: #1d4ed8; border: 1px solid var(--blue-mid); }
+.btn-outlook:hover { background: #dbeafe; }
+
+/* ── MAIN ── */
+.main { max-width: 1340px; margin: 0 auto; padding: 28px 32px; }
+
+/* ── KPIs ── */
+.kpis { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; margin-bottom: 26px; }
+.kpi {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: var(--shadow);
+  transition: box-shadow .2s;
+  cursor: default;
+}
+.kpi:hover { box-shadow: var(--shadow-md); }
+.kpi-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.kpi-icon.blue { background: var(--blue-light); color: var(--blue); }
+.kpi-icon.red { background: var(--red-light); color: var(--red); }
+.kpi-icon.amber { background: var(--amber-light); color: var(--amber); }
+.kpi-icon.green { background: var(--green-light); color: var(--green); }
+.kpi-icon.purple { background: var(--purple-light); color: var(--purple); }
+.kpi-val { font-size: 24px; font-weight: 700; line-height: 1; letter-spacing: -.03em; }
+.kpi-label { font-size: 12px; color: var(--sub); margin-top: 3px; font-weight: 400; }
+
+/* ── TWO-COL LAYOUT ── */
+.two-col { display: grid; grid-template-columns: 1fr 360px; gap: 20px; margin-bottom: 20px; }
+
+/* ── ALERTS ── */
+.alerts-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-header-title {
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.alert-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 20px; border-bottom: 1px solid rgba(0,0,0,.05);
+  animation: fadeIn .25s ease;
+  transition: background .12s;
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-item:hover { background: var(--bg); }
+.alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.15); }
+.dot-amber { background: var(--amber); box-shadow: 0 0 0 3px rgba(217,119,6,.15); }
+.alert-main { flex: 1; min-width: 0; }
+.alert-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alert-sub { font-size: 11px; color: var(--sub); margin-top: 2px; }
+.alert-actions { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+
+/* ── CALENDAR CARD ── */
+.cal-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.cal-header {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cal-nav { display: flex; align-items: center; gap: 6px; }
+.cal-nav-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 6px; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--sub); font-size: 13px;
+  transition: all .15s;
+}
+.cal-nav-btn:hover { background: var(--bg); color: var(--text); }
+.cal-month { font-size: 13px; font-weight: 600; min-width: 100px; text-align: center; }
+.cal-grid { padding: 14px 16px; }
+.cal-days-header {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  margin-bottom: 6px;
+}
+.cal-day-name { font-size: 10px; font-weight: 600; color: var(--sub); text-align: center; text-transform: uppercase; letter-spacing: .04em; padding: 4px 0; }
+.cal-cells { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 7px; font-size: 12px; cursor: default;
+  position: relative; transition: background .12s;
+}
+.cal-cell.other-month { color: var(--muted); }
+.cal-cell.today {
+  background: var(--blue); color: #fff; font-weight: 700;
+  box-shadow: 0 2px 8px rgba(37,99,235,.35);
+}
+.cal-cell.has-event { cursor: pointer; }
+.cal-cell.has-event:hover { background: var(--bg); }
+.cal-cell.has-red { background: rgba(220,38,38,.1); color: var(--red); font-weight: 600; }
+.cal-cell.has-red:hover { background: rgba(220,38,38,.18); }
+.cal-cell.has-amber { background: rgba(217,119,6,.1); color: var(--amber); font-weight: 600; }
+.cal-cell.has-amber:hover { background: rgba(217,119,6,.18); }
+.cal-cell.has-green { background: rgba(5,150,105,.08); color: var(--green); font-weight: 600; }
+.event-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; margin-top: 2px; }
+.cal-legend { padding: 10px 16px 14px; display: flex; gap: 14px; border-top: 1px solid var(--border); }
+.cal-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--sub); }
+.cal-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── SYNC SECTION ── */
+.sync-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); padding: 18px 20px;
+  box-shadow: var(--shadow); margin-bottom: 20px;
+}
+.sync-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.sync-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.sync-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: 1.5px solid; transition: all .15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.sync-btn:active { transform: scale(.97); }
+.sync-google { border-color: #34a853; color: #1a7430; background: #f0fdf4; }
+.sync-google:hover { background: #dcfce7; }
+.sync-outlook { border-color: #0078d4; color: #003d6b; background: #eff6ff; }
+.sync-outlook:hover { background: #dbeafe; }
+.sync-ical { border-color: var(--border-strong); color: var(--sub); background: var(--bg); }
+.sync-ical:hover { background: #efefef; color: var(--text); }
+.sync-icon { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.sync-desc { font-size: 11px; color: var(--sub); margin-top: 2px; line-height: 1.4; }
+
+/* ── TABLE SECTION ── */
+.table-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.table-toolbar {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--sub); font-size: 16px; pointer-events: none; }
+.search-wrap input {
+  width: 100%; padding: 8px 12px 8px 34px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; background: var(--bg); color: var(--text);
+  outline: none; font-family: 'DM Sans', sans-serif;
+  transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--blue); background: #fff; }
+select.filter {
+  padding: 8px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; background: var(--bg);
+  color: var(--text); outline: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: border-color .15s;
+}
+select.filter:focus { border-color: var(--blue); }
+
+/* ── GROUP ── */
+.group { border-bottom: 1px solid var(--border); }
+.group:last-child { border-bottom: none; }
+.group-header {
+  padding: 11px 20px; background: #FAFAFA;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+}
+.group-header:hover { background: #F3F4F6; }
+.group-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.group-meta { display: flex; align-items: center; gap: 10px; }
+.group-count { font-size: 12px; color: var(--sub); }
+.group-total { font-size: 12px; font-weight: 600; }
+.chevron { font-size: 14px; color: var(--sub); transition: transform .2s; }
+.chevron.open { transform: rotate(180deg); }
+
+/* ── TABLE ── */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  padding: 9px 16px; text-align: left;
+  font-size: 11px; font-weight: 600; color: var(--sub);
+  text-transform: uppercase; letter-spacing: .06em;
+  background: #FAFAFA; border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td { padding: 11px 16px; border-bottom: 1px solid rgba(0,0,0,.05); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(0,0,0,.015); }
+.col-placa { font-family: 'DM Mono', monospace; font-size: 11.5px; letter-spacing: .5px; color: var(--sub); }
+.col-val { font-weight: 600; }
+.col-valant { color: var(--sub); font-size: 12px; }
+.action-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 5px 7px; border-radius: 7px;
+  color: var(--sub); font-size: 15px;
+  transition: background .15s, color .15s;
+}
+.action-btn:hover { background: var(--bg); color: var(--text); }
+.action-btn.del:hover { background: var(--red-light); color: var(--red); }
+.action-btn.cal-add { color: var(--green); }
+.action-btn.cal-add:hover { background: var(--green-light); }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.badge-red { background: var(--red-light); color: var(--red); border: 1px solid rgba(220,38,38,.15); }
+.badge-amber { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(217,119,6,.15); }
+.badge-green { background: var(--green-light); color: var(--green); border: 1px solid rgba(5,150,105,.15); }
+.badge-blue { background: var(--blue-light); color: var(--blue); border: 1px solid rgba(37,99,235,.15); }
+.badge-gray { background: var(--bg); color: var(--sub); border: 1px solid var(--border); }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  z-index: 300; display: none; align-items: center; justify-content: center;
+  padding: 20px; backdrop-filter: blur(4px);
+}
+.overlay.show { display: flex; animation: fadeIn .2s ease; }
+.modal {
+  background: var(--card); border-radius: var(--rxl);
+  width: 100%; max-width: 580px; max-height: 92vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp .22s ease;
+}
+.modal-header { padding: 22px 26px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.modal-close {
+  background: var(--bg); border: none; cursor: pointer;
+  width: 30px; height: 30px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sub); font-size: 18px; transition: all .15s;
+}
+.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-body { padding: 22px 26px; }
+.modal-footer { padding: 16px 26px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1/-1; }
+label { font-size: 12px; font-weight: 600; color: var(--sub); letter-spacing: .02em; }
+input[type=text], input[type=number], input[type=date], select.form-select {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  font-size: 13.5px; color: var(--text); background: #fff;
+  outline: none; transition: border-color .15s, box-shadow .15s;
+  font-family: 'DM Sans', sans-serif;
+}
+input:focus, select.form-select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+.form-divider { grid-column: 1/-1; height: 1px; background: var(--border); margin: 4px 0; }
+.form-section-label { grid-column: 1/-1; font-size: 11px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: .07em; }
+
+/* ── CALENDAR SYNC MODAL ── */
+.sync-modal { max-width: 440px; }
+.sync-modal .sync-options { flex-direction: column; }
+.sync-modal .sync-btn { width: 100%; justify-content: flex-start; }
+.ical-link { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; color: var(--sub); word-break: break-all; margin-top: 6px; }
+
+/* ── TOOLTIP ── */
+.tooltip-wrap { position: relative; }
+.tooltip-wrap:hover .tooltip-box { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.tooltip-box {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(4px);
+  background: #111; color: #fff; font-size: 11px; padding: 5px 9px;
+  border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: all .15s; z-index: 99;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state { padding: 56px; text-align: center; color: var(--sub); }
+.empty-state i { font-size: 40px; margin-bottom: 14px; display: block; opacity: .25; }
+.empty-state p { font-size: 14px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #111; color: #fff;
+  padding: 12px 18px; border-radius: 12px;
+  font-size: 13px; font-weight: 500; z-index: 999;
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s ease;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: var(--shadow-md);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── PROGRESS BAR ── */
+.contract-progress { width: 100%; height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.contract-progress-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .kpis { grid-template-columns: repeat(2,1fr); } .kpi:last-child { grid-column: 1/-1; } }
+@media (max-width: 640px) {
+  .main { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .sync-options { flex-direction: column; }
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
     <div class="topbar-logo"><i class="ti ti-refresh-alert"></i></div>
     <span class="topbar-title">Controle de Reajustes</span>
-    <span id="topbar-date" style="font-size:12px;color:var(--sub);margin-left:4px"></span>
+    <span class="topbar-date" id="topbar-date"></span>
   </div>
-  <button class="btn btn-primary" onclick="openModal()"><i class="ti ti-plus"></i> Novo contrato</button>
+  <div class="topbar-right">
+    <button class="btn btn-ghost btn-sm" onclick="openSyncModal()"><i class="ti ti-calendar-event"></i> Sincronizar calendário</button>
+    <button class="btn btn-primary btn-sm" onclick="openModal()"><i class="ti ti-plus"></i> Novo contrato</button>
+  </div>
 </div>
 
 <div class="main">
+
+  <!-- KPIs -->
   <div class="kpis" id="kpis"></div>
-  <div class="alerts-card" id="alerts-card">
-    <div class="card-header">
-      <div class="card-header-title"><i class="ti ti-bell-ringing" style="color:var(--red)"></i> Alertas de reajuste</div>
-      <span id="alert-count" class="badge badge-red"></span>
+
+  <!-- TWO COL -->
+  <div class="two-col">
+    <!-- LEFT: ALERTS -->
+    <div>
+      <div class="alerts-card" id="alerts-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <i class="ti ti-bell-ringing" style="color:var(--red)"></i> Alertas de reajuste
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="alert-count" class="badge badge-red"></span>
+            <button class="btn btn-sm btn-cal" onclick="exportAllAlerts()" title="Exportar todos para calendário"><i class="ti ti-calendar-plus"></i> Exportar alertas</button>
+          </div>
+        </div>
+        <div id="alerts-body"></div>
+      </div>
     </div>
-    <div id="alerts-body"></div>
+
+    <!-- RIGHT: CALENDAR -->
+    <div>
+      <div class="cal-card">
+        <div class="cal-header">
+          <div class="card-header-title"><i class="ti ti-calendar" style="color:var(--blue)"></i> Calendário de vencimentos</div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calPrev()"><i class="ti ti-chevron-left"></i></button>
+            <span class="cal-month" id="cal-month-label"></span>
+            <button class="cal-nav-btn" onclick="calNext()"><i class="ti ti-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-days-header">
+            <div class="cal-day-name">Dom</div><div class="cal-day-name">Seg</div>
+            <div class="cal-day-name">Ter</div><div class="cal-day-name">Qua</div>
+            <div class="cal-day-name">Qui</div><div class="cal-day-name">Sex</div>
+            <div class="cal-day-name">Sáb</div>
+          </div>
+          <div class="cal-cells" id="cal-cells"></div>
+        </div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red)"></div> Vencido</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--amber)"></div> Atenção</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green)"></div> Em dia</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--blue)"></div> Hoje</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-    <span class="section-label" style="margin:0">Contratos</span>
+
+  <!-- TABLE SECTION -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <span style="font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.07em">Contratos</span>
     <span id="result-count" style="font-size:12px;color:var(--sub)"></span>
   </div>
   <div class="table-card">
@@ -147,11 +497,13 @@ input:focus,select.form-select:focus{border-color:var(--blue)}
       <select class="filter" id="filterCliente">
         <option value="">Todos os clientes</option>
       </select>
+      <button class="btn btn-ghost btn-sm" onclick="exportTableICS()" title="Exportar tabela filtrada para .ics"><i class="ti ti-download"></i> Exportar .ics</button>
     </div>
     <div id="table-body"></div>
   </div>
 </div>
 
+<!-- MODAL: CONTRATO -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-header">
@@ -170,9 +522,10 @@ input:focus,select.form-select:focus{border-color:var(--blue)}
           <input type="text" id="f-carro" placeholder="Ex: Polo, Argo, Mobi">
         </div>
         <div class="form-group">
-          <label>Placa *</label>
+          <label>Placa</label>
           <input type="text" id="f-placa" placeholder="Ex: ABC1D23" maxlength="8" style="text-transform:uppercase">
         </div>
+        <div class="form-section-label" style="margin-top:4px">Valores</div>
         <div class="form-group">
           <label>Valor anterior (R$)</label>
           <input type="number" id="f-valant" placeholder="0,00" step="0.01" min="0">
@@ -181,6 +534,7 @@ input:focus,select.form-select:focus{border-color:var(--blue)}
           <label>Valor atual (R$) *</label>
           <input type="number" id="f-valor" placeholder="0,00" step="0.01" min="0">
         </div>
+        <div class="form-section-label" style="margin-top:4px">Contrato</div>
         <div class="form-group">
           <label>Tipo de contrato</label>
           <select class="form-select" id="f-tipo">
@@ -196,7 +550,7 @@ input:focus,select.form-select:focus{border-color:var(--blue)}
           <label>Data do último reajuste</label>
           <input type="date" id="f-dtreaj">
         </div>
-        <div class="form-group">
+        <div class="form-group full">
           <label>Próximo vencimento</label>
           <input type="date" id="f-venc">
         </div>
@@ -209,15 +563,70 @@ input:focus,select.form-select:focus{border-color:var(--blue)}
   </div>
 </div>
 
+<!-- MODAL: SYNC CALENDAR -->
+<div class="overlay" id="overlay-sync">
+  <div class="modal sync-modal">
+    <div class="modal-header">
+      <span class="modal-title"><i class="ti ti-calendar-event" style="font-size:18px;color:var(--blue)"></i> Sincronizar Calendário</span>
+      <button class="modal-close" onclick="closeSyncModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--sub);margin-bottom:18px;line-height:1.6">
+        Exporte os vencimentos de contratos para o seu calendário favorito. Todos os contratos com data de vencimento serão incluídos.
+      </p>
+      <div class="sync-options">
+        <button class="sync-btn sync-google" onclick="exportGoogleCalendar()">
+          <div class="sync-icon">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:600">Google Calendar</div>
+            <div class="sync-desc">Abre o Google Calendar com o evento pré-preenchido</div>
+          </div>
+        </button>
+        <button class="sync-btn sync-outlook" onclick="exportOutlook()">
+          <div class="sync-icon">
+            <svg width="18" height="18" viewBox="0 0 48 48"><rect width="48" height="48" rx="6" fill="#0078D4"/><path fill="#fff" d="M10 14h28v20H10z" opacity=".15"/><path fill="#fff" d="M26 10v28M10 24h28" stroke="#fff" stroke-width="1.5" opacity=".2"/><text x="24" y="30" font-family="Arial" font-size="16" font-weight="bold" fill="white" text-anchor="middle">O</text></svg>
+          </div>
+          <div>
+            <div style="font-weight:600">Outlook / Microsoft 365</div>
+            <div class="sync-desc">Exporta arquivo .ics compatível com Outlook</div>
+          </div>
+        </button>
+        <button class="sync-btn sync-ical" onclick="exportICS()">
+          <div class="sync-icon"><i class="ti ti-file-ics" style="font-size:16px"></i></div>
+          <div>
+            <div style="font-weight:600">Arquivo .ics (padrão)</div>
+            <div class="sync-desc">Compatível com Apple Calendar, Thunderbird e outros</div>
+          </div>
+        </button>
+      </div>
+      <div style="margin-top:18px;padding:14px;background:var(--blue-light);border-radius:9px;border:1px solid var(--blue-mid)">
+        <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:5px"><i class="ti ti-info-circle"></i> Como usar no celular</div>
+        <p style="font-size:12px;color:var(--sub);line-height:1.6">Baixe o arquivo <b>.ics</b>, abra no celular e importe para o app de calendário (Google Calendar, Apple Calendar ou Outlook). Os alertas serão criados automaticamente 7 dias antes de cada vencimento.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeSyncModal()">Fechar</button>
+      <button class="btn btn-primary" onclick="exportICS()"><i class="ti ti-download"></i> Baixar todos (.ics)</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLTIP POPUP FOR CALENDAR -->
+<div id="cal-popup" style="display:none;position:fixed;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow-md);z-index:250;max-width:260px;font-size:12px;pointer-events:none"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const TODAY=new Date();TODAY.setHours(0,0,0,0);
-document.getElementById('topbar-date').textContent='· '+TODAY.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+/* ── DATA ── */
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+document.getElementById('topbar-date').textContent = '· ' + TODAY.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+
 function exDate(s){if(!s)return null;const d=new Date((s-25569)*86400000);d.setHours(0,0,0,0);return d;}
 function parseDate(s){if(!s)return null;const d=new Date(s+'T12:00:00');d.setHours(0,0,0,0);return d;}
 function fmtDate(d){return d?d.toLocaleDateString('pt-BR'):'—';}
-function fmtBRL(v){return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtBRL(v){return 'R$\u00a0'+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function diffDias(d){if(!d)return null;return Math.round((d-TODAY)/86400000);}
 function getStatus(c){
   if(c.tipo==='mensal')return 'mensal';
@@ -227,6 +636,7 @@ function getStatus(c){
   if(d<=30)return 'urgente';
   return 'ok';
 }
+
 const BASE=[
   {id:1,cliente:'ABCP',carro:'Saveiro',placa:'STX1B03',valor_ant:3300,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:3467},
   {id:2,cliente:'ABCP',carro:'Saveiro',placa:'SVM4H38',valor_ant:3300,dt_reaj:exDate(45762),vencimento:exDate(46127),tipo:'12 meses',valor:3467},
@@ -269,12 +679,106 @@ const BASE=[
   {id:39,cliente:'Valéria Pinto Cruz',carro:'Mobi',placa:'SVT5H94',valor_ant:2177.4,dt_reaj:exDate(45971),vencimento:null,tipo:'mensal',valor:2286},
   {id:40,cliente:'Zcon',carro:'Argo',placa:'GIX9J42',valor_ant:2846,dt_reaj:exDate(45950),vencimento:null,tipo:'mensal',valor:3016},
 ];
+
 let EXTRA=[];let nextId=1000;let editId=null;let openGroups={};
 try{const s=localStorage.getItem('rj_extra');if(s){const p=JSON.parse(s);EXTRA=p.map(c=>({...c,dt_reaj:c.dt_reaj?new Date(c.dt_reaj):null,vencimento:c.vencimento?new Date(c.vencimento):null}));}}catch(e){}
 try{const n=localStorage.getItem('rj_id');if(n)nextId=parseInt(n);}catch(e){}
 function saveExtra(){try{localStorage.setItem('rj_extra',JSON.stringify(EXTRA.map(c=>({...c,dt_reaj:c.dt_reaj?c.dt_reaj.toISOString():null,vencimento:c.vencimento?c.vencimento.toISOString():null}))));localStorage.setItem('rj_id',String(nextId));}catch(e){}}
 function allData(){return[...BASE,...EXTRA];}
 
+/* ── CALENDAR STATE ── */
+let calYear = TODAY.getFullYear();
+let calMonth = TODAY.getMonth();
+
+function renderCalendar() {
+  const ALL = allData();
+  const label = new Date(calYear, calMonth).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  document.getElementById('cal-month-label').textContent = label.charAt(0).toUpperCase()+label.slice(1);
+
+  // Build event map
+  const evMap = {};
+  ALL.forEach(c => {
+    if(!c.vencimento) return;
+    const key = c.vencimento.getFullYear()+'-'+(c.vencimento.getMonth()+1)+'-'+c.vencimento.getDate();
+    if(!evMap[key]) evMap[key] = [];
+    evMap[key].push(c);
+  });
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+  let cells = '';
+  let total = firstDay + daysInMonth;
+  if(total % 7 !== 0) total = total + (7 - total%7);
+
+  for(let i=0; i<total; i++) {
+    let day, month=calMonth, year=calYear, otherMonth=false;
+    if(i < firstDay) { day = daysInPrev - firstDay + i + 1; month=calMonth-1; if(month<0){month=11;year=calYear-1;} otherMonth=true; }
+    else if(i >= firstDay+daysInMonth) { day = i - firstDay - daysInMonth + 1; month=calMonth+1; if(month>11){month=0;year=calYear+1;} otherMonth=true; }
+    else { day = i - firstDay + 1; }
+
+    const key = year+'-'+(month+1)+'-'+day;
+    const isToday = !otherMonth && year===TODAY.getFullYear() && month===TODAY.getMonth() && day===TODAY.getDate();
+    const events = evMap[key] || [];
+    const hasVenc = events.some(c=>getStatus(c)==='vencido');
+    const hasUrg = !hasVenc && events.some(c=>getStatus(c)==='urgente');
+    const hasOk = !hasVenc && !hasUrg && events.length>0;
+
+    let cls = 'cal-cell';
+    if(otherMonth) cls += ' other-month';
+    if(isToday) cls += ' today';
+    else if(hasVenc) cls += ' has-event has-red';
+    else if(hasUrg) cls += ' has-event has-amber';
+    else if(hasOk) cls += ' has-event has-green';
+
+    const dot = events.length && !isToday ? '<div class="event-dot"></div>' : '';
+    const onclick = events.length ? `onclick="showCalPopup(event,'${key}')"` : '';
+    cells += `<div class="${cls}" ${onclick} title="${events.length?events.map(c=>c.cliente+' – '+c.carro).join(', '):''}">${day}${dot}</div>`;
+  }
+  document.getElementById('cal-cells').innerHTML = cells;
+}
+
+function calPrev(){if(calMonth===0){calMonth=11;calYear--;}else{calMonth--;}renderCalendar();}
+function calNext(){if(calMonth===11){calMonth=0;calYear++;}else{calMonth++;}renderCalendar();}
+
+// Calendar popup
+const _evMap2 = {};
+function buildEvMap(){
+  const ALL=allData();
+  ALL.forEach(c=>{
+    if(!c.vencimento)return;
+    const key=c.vencimento.getFullYear()+'-'+(c.vencimento.getMonth()+1)+'-'+c.vencimento.getDate();
+    if(!_evMap2[key])_evMap2[key]=[];
+    if(!_evMap2[key].find(x=>x.id===c.id))_evMap2[key].push(c);
+  });
+}
+
+function showCalPopup(e, key) {
+  buildEvMap();
+  const events = _evMap2[key]||[];
+  if(!events.length)return;
+  const popup = document.getElementById('cal-popup');
+  const html = events.map(c=>{
+    const st=getStatus(c);
+    const pill=st==='vencido'?'badge-red':st==='urgente'?'badge-amber':'badge-green';
+    const pillTxt=st==='vencido'?'Vencido':st==='urgente'?'Atenção':'Em dia';
+    return `<div style="margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--border)">
+      <div style="font-weight:600;font-size:12px">${c.cliente}</div>
+      <div style="color:var(--sub);font-size:11px">${c.carro} · <span style="font-family:DM Mono,monospace">${c.placa}</span></div>
+      <div style="margin-top:4px;display:flex;align-items:center;gap:6px"><span class="badge ${pill}" style="font-size:10px">${pillTxt}</span><span style="font-size:11px;color:var(--sub)">${fmtBRL(c.valor)}/mês</span></div>
+    </div>`;
+  }).join('');
+  popup.innerHTML = html + `<div style="font-size:11px;color:var(--sub);margin-top:4px">${events.length} contrato${events.length>1?'s':''} nesta data</div>`;
+  popup.style.display='block';
+  const r=e.target.getBoundingClientRect();
+  popup.style.left=(r.left+r.width/2-popup.offsetWidth/2)+'px';
+  popup.style.top=(r.top-popup.offsetHeight-10+window.scrollY)+'px';
+  setTimeout(()=>document.addEventListener('click',hideCalPopup,{once:true}),50);
+}
+function hideCalPopup(){document.getElementById('cal-popup').style.display='none';}
+
+/* ── RENDER ── */
 function render(){
   const ALL=allData();
   const q=(document.getElementById('search').value||'').toLowerCase();
@@ -283,6 +787,7 @@ function render(){
   const vencidos=ALL.filter(c=>getStatus(c)==='vencido');
   const urgentes=ALL.filter(c=>getStatus(c)==='urgente');
   const emDia=ALL.filter(c=>getStatus(c)==='ok');
+  const mensais=ALL.filter(c=>getStatus(c)==='mensal');
   const totalVal=ALL.reduce((s,c)=>s+parseFloat(c.valor||0),0);
 
   document.getElementById('kpis').innerHTML=`
@@ -290,9 +795,10 @@ function render(){
     <div class="kpi"><div class="kpi-icon red"><i class="ti ti-alert-triangle"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--red)">${vencidos.length}</div><div class="kpi-label">Vencidos</div></div></div>
     <div class="kpi"><div class="kpi-icon amber"><i class="ti ti-clock"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--amber)">${urgentes.length}</div><div class="kpi-label">Vencem em 30 dias</div></div></div>
     <div class="kpi"><div class="kpi-icon green"><i class="ti ti-circle-check"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--green)">${emDia.length}</div><div class="kpi-label">Em dia</div></div></div>
-    <div class="kpi"><div class="kpi-icon purple"><i class="ti ti-currency-dollar"></i></div><div class="kpi-info"><div class="kpi-val" style="font-size:15px">${fmtBRL(totalVal)}</div><div class="kpi-label">Receita mensal</div></div></div>
+    <div class="kpi"><div class="kpi-icon purple"><i class="ti ti-currency-dollar"></i></div><div class="kpi-info"><div class="kpi-val" style="font-size:16px">${fmtBRL(totalVal)}</div><div class="kpi-label">Receita mensal</div></div></div>
   `;
 
+  // ALERTS
   const alertsData=[
     ...vencidos.map(c=>({...c,st:'vencido',dias:diffDias(c.vencimento)})),
     ...urgentes.map(c=>({...c,st:'urgente',dias:diffDias(c.vencimento)})),
@@ -304,20 +810,25 @@ function render(){
     <div class="alert-item">
       <div class="alert-dot ${c.st==='vencido'?'dot-red':'dot-amber'}"></div>
       <div class="alert-main">
-        <div class="alert-name">${c.cliente} — ${c.carro} <span style="font-weight:400;color:var(--sub);font-size:12px">${c.placa}</span></div>
-        <div class="alert-sub">Vencimento: ${fmtDate(c.vencimento)} · Valor atual: ${fmtBRL(c.valor)} · ${c.tipo}</div>
+        <div class="alert-name">${c.cliente} — ${c.carro} <span style="font-weight:400;color:var(--sub);font-size:11px;font-family:DM Mono,monospace">${c.placa}</span></div>
+        <div class="alert-sub">Vence: ${fmtDate(c.vencimento)} · ${fmtBRL(c.valor)}/mês · ${c.tipo}</div>
       </div>
-      <span class="badge ${c.st==='vencido'?'badge-red':'badge-amber'}">${c.st==='vencido'?Math.abs(c.dias)+'d em atraso':c.dias+'d restantes'}</span>
-      <button class="action-btn" title="Registrar reajuste" onclick="openModal(${c.id})"><i class="ti ti-refresh"></i></button>
+      <div class="alert-actions">
+        <span class="badge ${c.st==='vencido'?'badge-red':'badge-amber'}">${c.st==='vencido'?Math.abs(c.dias)+'d em atraso':c.dias+'d restantes'}</span>
+        <button class="action-btn cal-add" title="Adicionar ao calendário" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button>
+        <button class="action-btn" title="Editar contrato" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button>
+      </div>
     </div>
   `).join('');
 
+  // CLIENT FILTER
   const clientes=[...new Set(ALL.map(c=>c.cliente))].sort();
   const selCl=document.getElementById('filterCliente');
   const curVal=selCl.value;
   selCl.innerHTML='<option value="">Todos os clientes</option>'+clientes.map(cl=>`<option value="${cl}" ${cl===curVal?'selected':''}>${cl}</option>`).join('');
   document.getElementById('clientes-list').innerHTML=clientes.map(cl=>`<option value="${cl}">`).join('');
 
+  // FILTER
   const filtered=ALL.filter(c=>{
     const st=getStatus(c);
     if(fs&&st!==fs)return false;
@@ -325,9 +836,9 @@ function render(){
     if(q&&!(c.cliente.toLowerCase().includes(q)||c.placa.toLowerCase().includes(q)||c.carro.toLowerCase().includes(q)))return false;
     return true;
   });
-
   document.getElementById('result-count').textContent=filtered.length+' contrato'+(filtered.length!==1?'s':'');
 
+  // TABLE
   const byClient={};
   filtered.forEach(c=>{if(!byClient[c.cliente])byClient[c.cliente]=[];byClient[c.cliente].push(c);});
   const area=document.getElementById('table-body');
@@ -349,23 +860,38 @@ function render(){
         </div>
       </div>
       ${isOpen?`<table>
-        <thead><tr><th>Veículo</th><th>Placa</th><th>Tipo</th><th>Último reajuste</th><th>Próx. vencimento</th><th>Valor ant.</th><th>Valor atual</th><th>Status</th><th></th></tr></thead>
+        <thead><tr>
+          <th>Veículo</th><th>Placa</th><th>Tipo</th>
+          <th>Último reajuste</th><th>Próx. vencimento</th>
+          <th>Valor ant.</th><th>Valor atual</th><th>Status</th><th></th>
+        </tr></thead>
         <tbody>${rows.map(c=>{
           const st=getStatus(c);
           const dias=diffDias(c.vencimento);
           const pill=st==='vencido'?'badge-red':st==='urgente'?'badge-amber':st==='mensal'?'badge-blue':'badge-green';
           const pillTxt=st==='vencido'?'Vencido':st==='urgente'?'Atenção':st==='mensal'?'Mensal':'Em dia';
-          const diasHtml=dias!==null&&dias<=30?`<div style="font-size:11px;margin-top:2px;color:${dias<0?'var(--red)':'var(--amber)'}">${dias<0?Math.abs(dias)+'d atraso':dias+'d restantes'}</div>`:'';
+          const diasHtml=dias!==null&&dias<=30?`<div style="font-size:10px;margin-top:2px;color:${dias<0?'var(--red)':'var(--amber)'};font-weight:500">${dias<0?Math.abs(dias)+'d em atraso':dias+'d restantes'}</div>`:'';
+          // progress bar for contracts
+          let prog='';
+          if(c.dt_reaj&&c.vencimento&&c.tipo!=='mensal'){
+            const total=diffDias2(c.vencimento,c.dt_reaj);
+            const elapsed=diffDias2(TODAY,c.dt_reaj);
+            const pct=Math.max(0,Math.min(100,Math.round(elapsed/total*100)));
+            const pc=st==='vencido'?'var(--red)':st==='urgente'?'var(--amber)':'var(--green)';
+            prog=`<div class="contract-progress"><div class="contract-progress-fill" style="width:${pct}%;background:${pc}"></div></div>`;
+          }
+          const reajPct=c.valor_ant&&c.valor?(((c.valor-c.valor_ant)/c.valor_ant)*100).toFixed(1):'';
           return `<tr>
             <td>${c.carro}</td>
             <td class="col-placa">${c.placa}</td>
-            <td>${c.tipo}</td>
+            <td><span class="badge badge-gray" style="font-size:10px">${c.tipo}</span></td>
             <td>${fmtDate(c.dt_reaj)}</td>
-            <td>${fmtDate(c.vencimento)}${diasHtml}</td>
+            <td>${fmtDate(c.vencimento)}${diasHtml}${prog}</td>
             <td class="col-valant">${c.valor_ant?fmtBRL(c.valor_ant):'—'}</td>
-            <td class="col-val">${fmtBRL(c.valor)}</td>
+            <td class="col-val">${fmtBRL(c.valor)}${reajPct?`<div style="font-size:10px;color:var(--green);font-weight:500">+${reajPct}%</div>`:''}</td>
             <td><span class="badge ${pill}">${pillTxt}</span></td>
             <td style="white-space:nowrap">
+              ${c.vencimento?`<button class="action-btn cal-add" title="Adicionar ao calendário" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button>`:''}
               <button class="action-btn" title="Editar" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button>
               ${c.id>=1000?`<button class="action-btn del" title="Excluir" onclick="delContrato(${c.id})"><i class="ti ti-trash"></i></button>`:''}
             </td>
@@ -374,10 +900,14 @@ function render(){
       </table>`:''}
     </div>`;
   }).join('');
+
+  renderCalendar();
 }
 
+function diffDias2(a,b){return Math.round((a-b)/86400000);}
 function toggleGroup(k){openGroups[k]=!openGroups[k];render();}
 
+/* ── MODAL CONTRATO ── */
 function openModal(id){
   editId=id||null;
   document.getElementById('modal-title').textContent=editId?'Editar contrato':'Novo contrato';
@@ -393,13 +923,12 @@ function openModal(id){
       document.getElementById('f-dtreaj').value=c.dt_reaj?c.dt_reaj.toISOString().split('T')[0]:'';
       document.getElementById('f-venc').value=c.vencimento?c.vencimento.toISOString().split('T')[0]:'';
     }
-  }else{
+  } else {
     ['f-cliente','f-carro','f-placa','f-valant','f-valor','f-dtreaj','f-venc'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('f-tipo').value='12 meses';
   }
   document.getElementById('overlay').classList.add('show');
 }
-
 function closeModal(){document.getElementById('overlay').classList.remove('show');editId=null;}
 
 function salvar(){
@@ -430,17 +959,116 @@ function delContrato(id){
   toast('Contrato excluído.','red');render();
 }
 
+/* ── SYNC MODAL ── */
+function openSyncModal(){document.getElementById('overlay-sync').classList.add('show');}
+function closeSyncModal(){document.getElementById('overlay-sync').classList.remove('show');}
+
+/* ── ICS GENERATION ── */
+function icsDate(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const dd=String(d.getDate()).padStart(2,'0');
+  return `${y}${m}${dd}`;
+}
+function makeUID(){return 'rj-'+Math.random().toString(36).substr(2,9)+'@reajustes';}
+function buildICS(contracts){
+  const now=new Date();
+  const ts=now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  let cal=`BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Controle de Reajustes//PT\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n`;
+  contracts.forEach(c=>{
+    if(!c.vencimento)return;
+    const start=icsDate(c.vencimento);
+    const end=icsDate(new Date(c.vencimento.getTime()+86400000));
+    const alarmDate=new Date(c.vencimento.getTime()-7*86400000);
+    const desc=`Cliente: ${c.cliente}\\nVeículo: ${c.carro} (${c.placa})\\nContrato: ${c.tipo}\\nValor atual: ${fmtBRL(c.valor)}/mês`;
+    cal+=`BEGIN:VEVENT\r\nUID:${makeUID()}\r\nDTSTAMP:${ts}\r\nDTSTART;VALUE=DATE:${start}\r\nDTEND;VALUE=DATE:${end}\r\nSUMMARY:Reajuste – ${c.cliente} / ${c.carro} ${c.placa}\r\nDESCRIPTION:${desc}\r\nBEGIN:VALARM\r\nTRIGGER:-P7D\r\nACTION:DISPLAY\r\nDESCRIPTION:Lembrete: reajuste de ${c.cliente} em 7 dias\r\nEND:VALARM\r\nEND:VEVENT\r\n`;
+  });
+  cal+=`END:VCALENDAR`;
+  return cal;
+}
+
+function downloadICS(content, filename){
+  const blob=new Blob([content],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=filename;
+  a.click();
+}
+
+function exportICS(){
+  const ALL=allData().filter(c=>c.vencimento);
+  if(!ALL.length){toast('Nenhum contrato com data de vencimento.','red');return;}
+  downloadICS(buildICS(ALL),'reajustes_todos.ics');
+  toast(`${ALL.length} eventos exportados (.ics)!`,'green');
+  closeSyncModal();
+}
+
+function exportSingleICS(id){
+  const c=allData().find(x=>x.id===id);
+  if(!c||!c.vencimento){toast('Sem data de vencimento.','red');return;}
+  downloadICS(buildICS([c]),`reajuste_${c.placa||c.id}.ics`);
+  toast('Evento exportado para calendário!','green');
+}
+
+function exportAllAlerts(){
+  const ALL=allData();
+  const alerts=[...ALL.filter(c=>getStatus(c)==='vencido'),...ALL.filter(c=>getStatus(c)==='urgente')].filter(c=>c.vencimento);
+  if(!alerts.length){toast('Nenhum alerta com data de vencimento.','red');return;}
+  downloadICS(buildICS(alerts),'alertas_reajuste.ics');
+  toast(`${alerts.length} alertas exportados!`,'green');
+}
+
+function exportTableICS(){
+  const ALL=allData();
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const fs=document.getElementById('filterStatus').value;
+  const fc=document.getElementById('filterCliente').value;
+  const filtered=ALL.filter(c=>{
+    const st=getStatus(c);
+    if(fs&&st!==fs)return false;
+    if(fc&&c.cliente!==fc)return false;
+    if(q&&!(c.cliente.toLowerCase().includes(q)||c.placa.toLowerCase().includes(q)||c.carro.toLowerCase().includes(q)))return false;
+    return true;
+  }).filter(c=>c.vencimento);
+  if(!filtered.length){toast('Nenhum contrato filtrado com vencimento.','red');return;}
+  downloadICS(buildICS(filtered),'reajustes_filtrados.ics');
+  toast(`${filtered.length} eventos exportados!`,'green');
+}
+
+function exportGoogleCalendar(){
+  const ALL=allData().filter(c=>c.vencimento);
+  if(!ALL.length){toast('Nenhum contrato com data de vencimento.','red');return;}
+  // Google Calendar supports multiple events; open first alert or first event
+  const c=ALL.sort((a,b)=>a.vencimento-b.vencimento)[0];
+  const dt=c.vencimento;
+  const start=`${dt.getFullYear()}${String(dt.getMonth()+1).padStart(2,'0')}${String(dt.getDate()).padStart(2,'0')}`;
+  const end=new Date(dt.getTime()+86400000);
+  const eend=`${end.getFullYear()}${String(end.getMonth()+1).padStart(2,'0')}${String(end.getDate()).padStart(2,'0')}`;
+  const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Reajuste – '+c.cliente+' / '+c.carro)}&dates=${start}/${eend}&details=${encodeURIComponent('Vencimento de reajuste\nCliente: '+c.cliente+'\nVeículo: '+c.carro+' ('+c.placa+')\nValor: '+fmtBRL(c.valor)+'/mês')}`;
+  window.open(url,'_blank');
+  toast('Para múltiplos eventos, use o arquivo .ics','green');
+}
+
+function exportOutlook(){
+  exportICS();
+}
+
+/* ── TOAST ── */
 function toast(msg,type){
   const el=document.getElementById('toast');
   el.innerHTML=`<i class="ti ${type==='green'?'ti-check':'ti-alert-circle'}"></i> ${msg}`;
-  el.style.background=type==='green'?'#1A5C2E':'#8B0000';
-  el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);
+  el.style.background=type==='green'?'#064E3B':'#7F1D1D';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
 }
 
+/* ── EVENTS ── */
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('filterStatus').addEventListener('change',render);
 document.getElementById('filterCliente').addEventListener('change',render);
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('overlay-sync').addEventListener('click',function(e){if(e.target===this)closeSyncModal();});
+
 render();
 </script>
 </body>
