@@ -397,15 +397,147 @@ input:focus, select.form-select:focus {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ── MOBILE BOTTOM NAV ── */
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 190;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+}
+.mobile-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+.mob-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 16px; border-radius: 10px; cursor: pointer;
+  background: none; border: none; color: var(--sub);
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+  transition: color .15s, background .15s; min-width: 60px;
+}
+.mob-tab i { font-size: 22px; }
+.mob-tab.active { color: var(--blue); }
+.mob-tab .mob-badge {
+  position: absolute; top: 2px; right: 10px;
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+}
+.mob-tab { position: relative; }
+
+/* ── MOBILE FAB ── */
+.fab {
+  display: none;
+  position: fixed; bottom: calc(72px + env(safe-area-inset-bottom)); right: 20px; z-index: 180;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  border: none; cursor: pointer; font-size: 24px;
+  box-shadow: 0 4px 16px rgba(37,99,235,.45);
+  align-items: center; justify-content: center;
+  transition: transform .15s, box-shadow .15s;
+}
+.fab:active { transform: scale(.93); box-shadow: 0 2px 8px rgba(37,99,235,.35); }
+
+/* ── MOBILE SECTIONS ── */
+.mobile-section { display: none; }
+
+/* ── SWIPEABLE KPI STRIP ── */
+.kpi-strip {
+  display: none;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; gap: 10px;
+  padding: 0 16px 4px;
+  margin-bottom: 16px;
+}
+.kpi-strip::-webkit-scrollbar { display: none; }
+.kpi-strip .kpi {
+  flex-shrink: 0; scroll-snap-align: start;
+  min-width: 140px; padding: 14px 16px;
+}
+
+/* ── MOBILE CARD LIST (alerts) ── */
+.mobile-alert-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); padding: 14px 16px; margin-bottom: 10px;
+  box-shadow: var(--shadow); animation: fadeIn .2s ease;
+}
+.mobile-alert-card.is-red { border-left: 3px solid var(--red); }
+.mobile-alert-card.is-amber { border-left: 3px solid var(--amber); }
+.mac-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.mac-title { font-size: 14px; font-weight: 600; }
+.mac-placa { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--sub); margin-top: 2px; }
+.mac-body { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.mac-footer { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+.mac-footer .btn { flex: 1; justify-content: center; font-size: 12px; }
+
+/* ── MOBILE CONTRACT CARD ── */
+.mob-contract-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rlg); margin-bottom: 8px;
+  overflow: hidden; box-shadow: var(--shadow);
+  animation: fadeIn .2s ease;
+}
+.mob-contract-header {
+  padding: 12px 14px; display: flex; align-items: center;
+  justify-content: space-between; cursor: pointer;
+  transition: background .12s;
+}
+.mob-contract-header:active { background: var(--bg); }
+.mob-contract-title { font-size: 13px; font-weight: 600; }
+.mob-contract-sub { font-size: 11px; color: var(--sub); margin-top: 2px; font-family: 'DM Mono', monospace; }
+.mob-contract-body { padding: 0 14px 12px; border-top: 1px solid var(--border); }
+.mob-contract-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,.04); font-size: 12px; }
+.mob-contract-row:last-child { border-bottom: none; }
+.mob-contract-row span:first-child { color: var(--sub); }
+.mob-contract-row span:last-child { font-weight: 500; text-align: right; }
+.mob-contract-actions { display: flex; gap: 6px; padding-top: 8px; }
+.mob-contract-actions .btn { flex: 1; justify-content: center; font-size: 12px; }
+
+/* ── GROUP LABEL (mobile contracts) ── */
+.mob-group-label {
+  font-size: 11px; font-weight: 600; color: var(--sub);
+  text-transform: uppercase; letter-spacing: .07em;
+  padding: 14px 2px 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) { .two-col { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2,1fr); } .kpi:last-child { grid-column: 1/-1; } }
+
 @media (max-width: 640px) {
-  .main { padding: 16px; }
-  .topbar { padding: 0 16px; }
+  /* show mobile elements */
+  .mobile-nav { display: block; }
+  .fab { display: flex; }
+  .kpi-strip { display: flex; }
+  .mobile-section { display: block; }
+
+  /* hide desktop elements */
+  .kpis { display: none; }
+  .two-col { display: none; }
+  .table-card { display: none; }
+  .section-header-desktop { display: none; }
+  .topbar-right .btn-ghost { display: none; }
+  .topbar-date { display: none; }
+
+  /* layout */
+  .main { padding: 12px 14px calc(80px + env(safe-area-inset-bottom)); }
+  .topbar { padding: 0 16px; height: 52px; }
+  .topbar-title { font-size: 14px; }
+  .topbar-logo { width: 30px; height: 30px; font-size: 15px; }
+
+  /* modals full-screen on mobile */
+  .overlay { align-items: flex-end; padding: 0; }
+  .modal { border-radius: var(--rxl) var(--rxl) 0 0; max-height: 92vh; }
+  .sync-modal { max-width: 100%; }
   .form-grid { grid-template-columns: 1fr; }
   .sync-options { flex-direction: column; }
+  .modal-footer { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
 }
+
 </style>
 </head>
 <body>
@@ -423,10 +555,100 @@ input:focus, select.form-select:focus {
   </div>
 </div>
 
+<!-- FAB -->
+<button class="fab" onclick="openModal()" aria-label="Novo contrato"><i class="ti ti-plus"></i></button>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" aria-label="Navegação">
+  <div class="mobile-nav-inner">
+    <button class="mob-tab active" id="mob-tab-alertas" onclick="switchMobTab('alertas')">
+      <i class="ti ti-bell" aria-hidden="true"></i>
+      <span>Alertas</span>
+      <span class="mob-badge" id="mob-badge" style="display:none"></span>
+    </button>
+    <button class="mob-tab" id="mob-tab-calendario" onclick="switchMobTab('calendario')">
+      <i class="ti ti-calendar" aria-hidden="true"></i>
+      <span>Calendário</span>
+    </button>
+    <button class="mob-tab" id="mob-tab-contratos" onclick="switchMobTab('contratos')">
+      <i class="ti ti-list" aria-hidden="true"></i>
+      <span>Contratos</span>
+    </button>
+    <button class="mob-tab" id="mob-tab-sync" onclick="openSyncModal()">
+      <i class="ti ti-calendar-event" aria-hidden="true"></i>
+      <span>Sincronizar</span>
+    </button>
+  </div>
+</nav>
+
 <div class="main">
 
-  <!-- KPIs -->
+  <!-- KPIs strip (mobile) -->
+  <div class="kpi-strip" id="kpi-strip"></div>
+
+  <!-- KPIs grid (desktop) -->
   <div class="kpis" id="kpis"></div>
+
+  <!-- MOBILE: ALERTAS -->
+  <div class="mobile-section" id="mob-sec-alertas">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-size:13px;font-weight:600">Alertas de reajuste</span>
+      <button class="btn btn-sm btn-cal" onclick="exportAllAlerts()"><i class="ti ti-calendar-plus"></i> Exportar</button>
+    </div>
+    <div id="mob-alerts-body"></div>
+  </div>
+
+  <!-- MOBILE: CALENDÁRIO -->
+  <div class="mobile-section" id="mob-sec-calendario" style="display:none">
+    <div class="cal-card">
+      <div class="cal-header">
+        <div class="card-header-title" style="font-size:13px"><i class="ti ti-calendar" style="color:var(--blue)"></i> Vencimentos</div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="calPrev()"><i class="ti ti-chevron-left"></i></button>
+          <span class="cal-month" id="cal-month-label-mob"></span>
+          <button class="cal-nav-btn" onclick="calNext()"><i class="ti ti-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-days-header">
+          <div class="cal-day-name">D</div><div class="cal-day-name">S</div>
+          <div class="cal-day-name">T</div><div class="cal-day-name">Q</div>
+          <div class="cal-day-name">Q</div><div class="cal-day-name">S</div>
+          <div class="cal-day-name">S</div>
+        </div>
+        <div class="cal-cells" id="cal-cells-mob"></div>
+      </div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red)"></div> Vencido</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--amber)"></div> Atenção</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green)"></div> Em dia</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--blue)"></div> Hoje</div>
+      </div>
+    </div>
+    <!-- Selected day events -->
+    <div id="mob-cal-events" style="margin-top:14px"></div>
+  </div>
+
+  <!-- MOBILE: CONTRATOS -->
+  <div class="mobile-section" id="mob-sec-contratos" style="display:none">
+    <div style="margin-bottom:12px">
+      <div class="search-wrap" style="margin-bottom:8px">
+        <i class="ti ti-search"></i>
+        <input type="text" id="mob-search" placeholder="Buscar cliente, placa ou veículo..." oninput="renderMobContratos()">
+      </div>
+      <div style="display:flex;gap:8px">
+        <select class="filter" id="mob-filterStatus" style="flex:1" onchange="renderMobContratos()">
+          <option value="">Todos os status</option>
+          <option value="vencido">Vencido</option>
+          <option value="urgente">30 dias</option>
+          <option value="ok">Em dia</option>
+          <option value="mensal">Mensal</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="exportTableICS()"><i class="ti ti-download"></i> .ics</button>
+      </div>
+    </div>
+    <div id="mob-contratos-body"></div>
+  </div>
 
   <!-- TWO COL -->
   <div class="two-col">
@@ -477,7 +699,7 @@ input:focus, select.form-select:focus {
   </div>
 
   <!-- TABLE SECTION -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+  <div class="section-header-desktop" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
     <span style="font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.07em">Contratos</span>
     <span id="result-count" style="font-size:12px;color:var(--sub)"></span>
   </div>
@@ -1063,11 +1285,181 @@ function toast(msg,type){
 }
 
 /* ── EVENTS ── */
+/* ── MOBILE TAB SWITCHING ── */
+let currentMobTab = 'alertas';
+function switchMobTab(tab) {
+  currentMobTab = tab;
+  ['alertas','calendario','contratos'].forEach(t => {
+    const sec = document.getElementById('mob-sec-'+t);
+    const btn = document.getElementById('mob-tab-'+t);
+    if(sec) sec.style.display = t === tab ? 'block' : 'none';
+    if(btn) btn.classList.toggle('active', t === tab);
+  });
+  if(tab === 'calendario') { renderCalendar(); }
+  if(tab === 'contratos') { renderMobContratos(); }
+}
+
+/* ── MOBILE KPI STRIP ── */
+function renderMobKPIs(ALL) {
+  const vencidos = ALL.filter(c=>getStatus(c)==='vencido');
+  const urgentes = ALL.filter(c=>getStatus(c)==='urgente');
+  const emDia = ALL.filter(c=>getStatus(c)==='ok');
+  const totalVal = ALL.reduce((s,c)=>s+parseFloat(c.valor||0),0);
+  document.getElementById('kpi-strip').innerHTML = `
+    <div class="kpi"><div class="kpi-icon blue"><i class="ti ti-car"></i></div><div class="kpi-info"><div class="kpi-val">${ALL.length}</div><div class="kpi-label">Ativos</div></div></div>
+    <div class="kpi"><div class="kpi-icon red"><i class="ti ti-alert-triangle"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--red)">${vencidos.length}</div><div class="kpi-label">Vencidos</div></div></div>
+    <div class="kpi"><div class="kpi-icon amber"><i class="ti ti-clock"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--amber)">${urgentes.length}</div><div class="kpi-label">30 dias</div></div></div>
+    <div class="kpi"><div class="kpi-icon green"><i class="ti ti-circle-check"></i></div><div class="kpi-info"><div class="kpi-val" style="color:var(--green)">${emDia.length}</div><div class="kpi-label">Em dia</div></div></div>
+    <div class="kpi"><div class="kpi-icon purple"><i class="ti ti-currency-dollar"></i></div><div class="kpi-info"><div class="kpi-val" style="font-size:13px">${fmtBRL(totalVal)}</div><div class="kpi-label">Receita</div></div></div>
+  `;
+  const nb = vencidos.length + urgentes.length;
+  const badge = document.getElementById('mob-badge');
+  if(nb > 0) { badge.textContent = nb; badge.style.display = 'flex'; }
+  else { badge.style.display = 'none'; }
+}
+
+/* ── MOBILE ALERTS ── */
+function renderMobAlerts(alertsData) {
+  if(!alertsData.length) {
+    document.getElementById('mob-alerts-body').innerHTML = '<div class="empty-state"><i class="ti ti-check"></i><p>Nenhum alerta no momento.</p></div>';
+    return;
+  }
+  document.getElementById('mob-alerts-body').innerHTML = alertsData.map(c => {
+    const isRed = c.st === 'vencido';
+    return `<div class="mobile-alert-card ${isRed?'is-red':'is-amber'}">
+      <div class="mac-header">
+        <div>
+          <div class="mac-title">${c.cliente} — ${c.carro}</div>
+          <div class="mac-placa">${c.placa} · ${c.tipo}</div>
+        </div>
+        <span class="badge ${isRed?'badge-red':'badge-amber'}">${isRed?Math.abs(c.dias)+'d atraso':c.dias+'d'}</span>
+      </div>
+      <div class="mac-body">
+        <span class="badge badge-gray" style="font-size:10px"><i class="ti ti-calendar"></i> ${fmtDate(c.vencimento)}</span>
+        <span class="badge badge-gray" style="font-size:10px">${fmtBRL(c.valor)}/mês</span>
+      </div>
+      <div class="mac-footer">
+        <button class="btn btn-sm btn-cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i> Calendário</button>
+        <button class="btn btn-sm btn-ghost" onclick="openModal(${c.id})"><i class="ti ti-edit"></i> Editar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── MOBILE CONTRACTS ── */
+let mobOpenContracts = {};
+function renderMobContratos() {
+  const ALL = allData();
+  const q = (document.getElementById('mob-search')?.value||'').toLowerCase();
+  const fs = document.getElementById('mob-filterStatus')?.value||'';
+  const filtered = ALL.filter(c => {
+    const st = getStatus(c);
+    if(fs && st !== fs) return false;
+    if(q && !(c.cliente.toLowerCase().includes(q)||c.placa.toLowerCase().includes(q)||c.carro.toLowerCase().includes(q))) return false;
+    return true;
+  });
+  if(!filtered.length) {
+    document.getElementById('mob-contratos-body').innerHTML = '<div class="empty-state"><i class="ti ti-search"></i><p>Nenhum contrato encontrado.</p></div>';
+    return;
+  }
+  const byClient = {};
+  filtered.forEach(c => { if(!byClient[c.cliente]) byClient[c.cliente]=[]; byClient[c.cliente].push(c); });
+  document.getElementById('mob-contratos-body').innerHTML = Object.entries(byClient).sort((a,b)=>a[0].localeCompare(b[0])).map(([cl, rows]) => {
+    const tot = rows.reduce((s,c)=>s+parseFloat(c.valor||0),0);
+    const nalerts = rows.filter(c=>['vencido','urgente'].includes(getStatus(c))).length;
+    return `<div class="mob-group-label">
+      ${nalerts?`<span class="badge badge-red" style="font-size:10px">${nalerts} alerta${nalerts>1?'s':''}</span>`:'<span></span>'}
+      <span>${cl} · ${fmtBRL(tot)}/mês</span>
+    </div>
+    ${rows.map(c => {
+      const st = getStatus(c);
+      const dias = diffDias(c.vencimento);
+      const pill = st==='vencido'?'badge-red':st==='urgente'?'badge-amber':st==='mensal'?'badge-blue':'badge-green';
+      const pillTxt = st==='vencido'?'Vencido':st==='urgente'?'Atenção':st==='mensal'?'Mensal':'Em dia';
+      const open = mobOpenContracts[c.id];
+      return `<div class="mob-contract-card">
+        <div class="mob-contract-header" onclick="toggleMobContract(${c.id})">
+          <div>
+            <div class="mob-contract-title">${c.carro} <span class="badge ${pill}" style="font-size:10px">${pillTxt}</span></div>
+            <div class="mob-contract-sub">${c.placa}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;font-weight:600">${fmtBRL(c.valor)}</span>
+            <i class="ti ti-chevron-${open?'up':'down'}" style="color:var(--sub);font-size:14px"></i>
+          </div>
+        </div>
+        ${open?`<div class="mob-contract-body">
+          <div class="mob-contract-row"><span>Tipo</span><span>${c.tipo}</span></div>
+          <div class="mob-contract-row"><span>Último reajuste</span><span>${fmtDate(c.dt_reaj)}</span></div>
+          <div class="mob-contract-row"><span>Vencimento</span><span style="color:${dias!==null&&dias<0?'var(--red)':dias!==null&&dias<=30?'var(--amber)':'inherit'}">${fmtDate(c.vencimento)}${dias!==null&&dias<=30?` (${dias<0?Math.abs(dias)+'d atraso':dias+'d'})`:''}</span></div>
+          <div class="mob-contract-row"><span>Valor anterior</span><span>${c.valor_ant?fmtBRL(c.valor_ant):'—'}</span></div>
+          <div class="mob-contract-row"><span>Valor atual</span><span style="font-weight:600">${fmtBRL(c.valor)}</span></div>
+          <div class="mob-contract-actions">
+            ${c.vencimento?`<button class="btn btn-sm btn-cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i> Cal.</button>`:''}
+            <button class="btn btn-sm btn-ghost" onclick="openModal(${c.id})"><i class="ti ti-edit"></i> Editar</button>
+            ${c.id>=1000?`<button class="btn btn-sm" style="background:var(--red-light);color:var(--red);flex:0;border:1px solid var(--red-mid)" onclick="delContrato(${c.id})"><i class="ti ti-trash"></i></button>`:''}
+          </div>
+        </div>`:''}
+      </div>`;
+    }).join('')}`;
+  }).join('');
+}
+function toggleMobContract(id) {
+  mobOpenContracts[id] = !mobOpenContracts[id];
+  renderMobContratos();
+}
+
+/* ── MOBILE CALENDAR CLICK ── */
+function showMobCalEvents(key) {
+  buildEvMap();
+  const events = _evMap2[key]||[];
+  const container = document.getElementById('mob-cal-events');
+  if(!events.length) { container.innerHTML=''; return; }
+  container.innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Vencimentos do dia</div>` +
+    events.map(c => {
+      const st = getStatus(c);
+      const pill = st==='vencido'?'badge-red':st==='urgente'?'badge-amber':'badge-green';
+      return `<div class="mobile-alert-card ${st==='vencido'?'is-red':st==='urgente'?'is-amber':''}">
+        <div class="mac-header">
+          <div><div class="mac-title">${c.cliente} — ${c.carro}</div><div class="mac-placa">${c.placa}</div></div>
+          <span class="badge ${pill}" style="font-size:10px">${st==='vencido'?'Vencido':st==='urgente'?'Atenção':'Em dia'}</span>
+        </div>
+        <div class="mac-footer">
+          <button class="btn btn-sm btn-cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i> Exportar</button>
+          <button class="btn btn-sm btn-ghost" onclick="openModal(${c.id})"><i class="ti ti-edit"></i> Editar</button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+/* ── PATCH renderCalendar TO ALSO UPDATE MOBILE ── */
+const _origRenderCal = renderCalendar;
+renderCalendar = function() {
+  _origRenderCal();
+  const mob = document.getElementById('cal-cells-mob');
+  const lbl = document.getElementById('cal-month-label-mob');
+  if(mob) mob.innerHTML = document.getElementById('cal-cells').innerHTML.replace(/onclick="showCalPopup\(event,'([^']+)'\)"/g, `onclick="showMobCalEvents('$1')"`);
+  if(lbl) lbl.textContent = document.getElementById('cal-month-label').textContent;
+};
+
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('filterStatus').addEventListener('change',render);
 document.getElementById('filterCliente').addEventListener('change',render);
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 document.getElementById('overlay-sync').addEventListener('click',function(e){if(e.target===this)closeSyncModal();});
+
+/* ── PATCH render TO ALSO UPDATE MOBILE ── */
+const _origRender = render;
+render = function() {
+  _origRender();
+  const ALL = allData();
+  renderMobKPIs(ALL);
+  const vencidos = ALL.filter(c=>getStatus(c)==='vencido');
+  const urgentes = ALL.filter(c=>getStatus(c)==='urgente');
+  const alertsData = [...vencidos.map(c=>({...c,st:'vencido',dias:diffDias(c.vencimento)})), ...urgentes.map(c=>({...c,st:'urgente',dias:diffDias(c.vencimento)}))].sort((a,b)=>a.dias-b.dias);
+  renderMobAlerts(alertsData);
+  if(currentMobTab === 'contratos') renderMobContratos();
+};
 
 render();
 </script>
