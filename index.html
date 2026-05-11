@@ -26192,18 +26192,36 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
 
   var CAMPOS = {
     clientes: [
-      { k:"nome",         label:"Nome *",          aliases:["nome","name","cliente","locatário","locatario"] },
-      { k:"cpf",          label:"CPF/CNPJ",         aliases:["cpf","cnpj","cpf/cnpj","documento","doc"] },
-      { k:"telefone",     label:"Telefone",          aliases:["telefone","fone","celular","whatsapp","tel"] },
-      { k:"email",        label:"E-mail",            aliases:["email","e-mail","mail"] },
-      { k:"rg",           label:"RG",                aliases:["rg","identidade","registro geral"] },
-      { k:"cnh",          label:"CNH (número)",      aliases:["cnh","habilitação","habilitacao","nro cnh","nº cnh"] },
-      { k:"cnh_validade", label:"Validade CNH",      aliases:["validade cnh","venc cnh","venc. cnh","validade habilitação"] },
-      { k:"endereco",     label:"Endereço",          aliases:["endereço","endereco","logradouro","rua","address"] },
-      { k:"cidade",       label:"Cidade",            aliases:["cidade","municipio","município","city"] },
-      { k:"uf",           label:"UF/Estado",         aliases:["uf","estado","state","uf_end"] },
-      { k:"cep",          label:"CEP",               aliases:["cep","zip","postal"] },
-      { k:"obs",          label:"Observações",       aliases:["obs","observações","observacoes","notas","nota"] },
+      { k:"nome",              label:"Cliente *",              aliases:["cliente","nome","name","locatário","locatario"] },
+      { k:"cpf",               label:"CPF/Passaporte",         aliases:["cpf/passaporte","cpf","cnpj","passaporte","documento","doc","cpf/cnpj"] },
+      { k:"sexo",              label:"Sexo",                   aliases:["sexo","gênero","genero","sex","gender"] },
+      { k:"rg",                label:"RG",                     aliases:["rg","identidade","registro geral"] },
+      { k:"data_nascimento",   label:"Data Nascimento",        aliases:["data nascimento","nascimento","data de nascimento","dt nascimento","dt. nascimento","birthdate","birth date"] },
+      { k:"email",             label:"Email",                  aliases:["email","e-mail","mail"] },
+      { k:"nacionalidade",     label:"Nacionalidade",          aliases:["nacionalidade","nationality"] },
+      { k:"endereco",          label:"Endereço Residencial",   aliases:["endereço residencial","endereco residencial","endereço","endereco","logradouro","rua","address"] },
+      { k:"numero_end",        label:"Num.",                   aliases:["num.","número","numero","num","number","nº"] },
+      { k:"complemento_end",   label:"Complemento",            aliases:["complemento","complement","apto","apartamento"] },
+      { k:"bairro",            label:"Bairro",                 aliases:["bairro","district","neighborhood"] },
+      { k:"cep",               label:"CEP",                    aliases:["cep","zip","postal"] },
+      { k:"cidade",            label:"Cidade",                 aliases:["cidade","municipio","município","city"] },
+      { k:"uf",                label:"Estado",                 aliases:["estado","uf","state","uf_end"] },
+      { k:"telefone",          label:"Fone Residencial",       aliases:["fone residencial","telefone residencial","fone res","telefone","fone","tel","phone"] },
+      { k:"celular",           label:"Celular",                aliases:["celular","cel","whatsapp","mobile","fone celular"] },
+      { k:"outro_fone",        label:"Outro Fone",             aliases:["outro fone","outros fones","outro telefone","fone alternativo","tel alternativo"] },
+      { k:"endereco_comercial",label:"Endereço Comercial",     aliases:["endereço comercial","endereco comercial","end. comercial","endereço comercial"] },
+      { k:"num_comercial",     label:"Num. Comercial",         aliases:["num. comercial","numero comercial","nº comercial"] },
+      { k:"complemento_com",   label:"Complemento Comercial",  aliases:["complemento comercial","compl. comercial"] },
+      { k:"bairro_comercial",  label:"Bairro Comercial",       aliases:["bairro comercial"] },
+      { k:"cep_comercial",     label:"CEP Comercial",          aliases:["cep comercial"] },
+      { k:"cidade_comercial",  label:"Cidade Comercial",       aliases:["cidade comercial"] },
+      { k:"uf_comercial",      label:"Estado Comercial",       aliases:["estado comercial","uf comercial"] },
+      { k:"fone_comercial",    label:"Fone Comercial",         aliases:["fone comercial","telefone comercial","tel comercial","fone com."] },
+      { k:"cnh",               label:"Carteira de Motorista CNH", aliases:["carteira de motorista cnh","carteira de motorista","cnh","habilitação","habilitacao","nro cnh","nº cnh","numero cnh"] },
+      { k:"prontuario",        label:"Prontuário",             aliases:["prontuário","prontuario"] },
+      { k:"cnh_categoria",     label:"Categoria CNH",          aliases:["categoria cnh","categoria","cat. cnh","cat cnh"] },
+      { k:"cnh_validade",      label:"Validade CNH",           aliases:["validade cnh","venc cnh","venc. cnh","validade habilitação","validade cnh"] },
+      { k:"obs",               label:"Observações",            aliases:["obs","observações","observacoes","notas","nota"] },
     ],
     veiculos: [
       { k:"placa",        label:"Placa *",           aliases:["placa","plate","placa do veículo","placa veiculo"] },
@@ -26312,17 +26330,35 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
           var nome = getVal("nome");
           if (!nome) { erros.push("Linha "+(i+2)+": Nome obrigatório"); continue; }
           var p = { nome:nome };
-          if (getVal("cpf")) p.cpf = getVal("cpf");
-          if (getVal("telefone")) p.telefone = getVal("telefone");
-          if (getVal("email")) p.email = getVal("email");
-          if (getVal("rg")) p.rg = getVal("rg");
-          if (getVal("cnh")) p.cnh = getVal("cnh");
-          if (getVal("cnh_validade")) p.cnh_validade = parseDate(getVal("cnh_validade")) || getVal("cnh_validade");
-          if (getVal("endereco")) p.endereco = getVal("endereco");
-          if (getVal("cidade")) p.cidade = getVal("cidade");
-          if (getVal("uf")) p.uf_end = getVal("uf");
-          if (getVal("cep")) p.cep = getVal("cep");
-          if (getVal("obs")) p.obs = getVal("obs");
+          if (getVal("cpf"))               p.cpf               = getVal("cpf");
+          if (getVal("sexo"))              p.sexo              = getVal("sexo");
+          if (getVal("rg"))                p.rg                = getVal("rg");
+          if (getVal("data_nascimento"))   p.data_nascimento   = parseDate(getVal("data_nascimento")) || getVal("data_nascimento");
+          if (getVal("email"))             p.email             = getVal("email");
+          if (getVal("nacionalidade"))     p.nacionalidade     = getVal("nacionalidade");
+          if (getVal("endereco"))          p.endereco          = getVal("endereco");
+          if (getVal("numero_end"))        p.numero_end        = getVal("numero_end");
+          if (getVal("complemento_end"))   p.complemento_end   = getVal("complemento_end");
+          if (getVal("bairro"))            p.bairro            = getVal("bairro");
+          if (getVal("cep"))               p.cep               = getVal("cep");
+          if (getVal("cidade"))            p.cidade            = getVal("cidade");
+          if (getVal("uf"))                p.uf_end            = getVal("uf");
+          if (getVal("telefone"))          p.telefone          = getVal("telefone");
+          if (getVal("celular"))           p.celular           = getVal("celular");
+          if (getVal("outro_fone"))        p.outro_fone        = getVal("outro_fone");
+          if (getVal("endereco_comercial")) p.endereco_comercial = getVal("endereco_comercial");
+          if (getVal("num_comercial"))     p.num_comercial     = getVal("num_comercial");
+          if (getVal("complemento_com"))   p.complemento_com   = getVal("complemento_com");
+          if (getVal("bairro_comercial"))  p.bairro_comercial  = getVal("bairro_comercial");
+          if (getVal("cep_comercial"))     p.cep_comercial     = getVal("cep_comercial");
+          if (getVal("cidade_comercial"))  p.cidade_comercial  = getVal("cidade_comercial");
+          if (getVal("uf_comercial"))      p.uf_comercial      = getVal("uf_comercial");
+          if (getVal("fone_comercial"))    p.fone_comercial    = getVal("fone_comercial");
+          if (getVal("cnh"))               p.cnh               = getVal("cnh");
+          if (getVal("prontuario"))        p.prontuario        = getVal("prontuario");
+          if (getVal("cnh_categoria"))     p.cnh_categoria     = getVal("cnh_categoria");
+          if (getVal("cnh_validade"))      p.cnh_validade      = parseDate(getVal("cnh_validade")) || getVal("cnh_validade");
+          if (getVal("obs"))               p.obs               = getVal("obs");
           var novo = await db.post("clientes", p);
           setClientes(function(prev){ return [novo].concat(prev); });
           inseridos++;
