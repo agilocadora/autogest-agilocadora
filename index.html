@@ -33006,7 +33006,7 @@ function updateFab(){
   var tabText = '';
   var navA = document.querySelector('.lg-nav-btn-active');
   if(navA) tabText = (navA.textContent||navA.innerText||'').trim().toLowerCase();
-  var isNoFab = noFabTabs.some(function(t){ return ctx.tabId===t; }) ||\
+  var isNoFab = noFabTabs.some(function(t){ return ctx.tabId===t; }) ||
     tabText.includes('início') || tabText.includes('relat') ||
     tabText.includes('config') || tabText.includes('calend') ||
     tabText.includes('gráfico') || tabText.includes('linha');
