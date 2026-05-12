@@ -453,7 +453,7 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
           </div>
           <div class="reaj-config-item">
             <label>Aplicar a</label>
-            <select class="fsel" id="reaj-target" onchange="updatePreview()">
+            <select class="fsel" id="reaj-target" onchange="handleReajTargetChange(this.value)">
               <option value="todos">Todos os contratos</option>
               <option value="mensal">Somente mensais</option>
               <option value="anuais">Somente anuais</option>
@@ -464,9 +464,11 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
             <select class="fsel" id="reaj-target-cliente" style="display:none;margin-top:6px" onchange="updatePreview()">
               <option value="">Selecione o cliente</option>
             </select>
-            <select class="fsel" id="reaj-target-individual" style="display:none;margin-top:6px" onchange="updatePreview()">
-              <option value="">Selecione o contrato</option>
-            </select>
+            <div id="reaj-individual-wrap" style="display:none;margin-top:6px">
+              <select class="fsel" id="reaj-target-individual" onchange="updatePreview()">
+                <option value="">— Selecione o contrato —</option>
+              </select>
+            </div>
           </div>
         </div>
         <!-- PREVIEW -->
@@ -806,19 +808,18 @@ function selectIdx(key){
   renderReauste();
 }
 
-document.getElementById('reaj-target').addEventListener('change',function(){
-  const isCliente = this.value === 'cliente';
-  const isInd = this.value === 'individual';
-  document.getElementById('reaj-target-cliente').style.display = isCliente ? 'block' : 'none';
-  const selInd = document.getElementById('reaj-target-individual');
-  selInd.style.display = isInd ? 'block' : 'none';
-  if(isInd){
+function handleReajTargetChange(val){
+  document.getElementById('reaj-target-cliente').style.display = val==='cliente' ? 'block' : 'none';
+  const wrap = document.getElementById('reaj-individual-wrap');
+  wrap.style.display = val==='individual' ? 'block' : 'none';
+  if(val==='individual'){
     const ALL = allData();
-    selInd.innerHTML = '<option value="">— Selecione o contrato —</option>' +
-      ALL.map(c => `<option value="${c.id}">${c.cliente} — ${c.carro} (${c.placa}) · ${fmtBRL(c.valor)}/mês</option>`).join('');
+    const sel = document.getElementById('reaj-target-individual');
+    sel.innerHTML = '<option value="">— Selecione o contrato —</option>' +
+      ALL.map(c=>`<option value="${c.id}">${c.cliente} — ${c.carro} (${c.placa}) · ${fmtBRL(c.valor)}/mês</option>`).join('');
   }
   updatePreview();
-});
+}
 
 document.getElementById('reaj-target-individual').addEventListener('change', updatePreview);
 
