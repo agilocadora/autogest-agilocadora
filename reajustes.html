@@ -584,6 +584,45 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
   </div>
 </div>
 
+<!-- MODAL REAJUSTE RÁPIDO -->
+<div class="overlay" id="overlay-reaj">
+  <div class="modal" style="max-width:460px">
+    <div class="mhd">
+      <span class="mtitle" id="reaj-modal-title"><i class="ti ti-percentage" style="color:var(--purple)"></i> Reajuste rápido</span>
+      <button class="mclose" onclick="closeReajModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="mbody">
+      <!-- contrato info -->
+      <div id="reaj-modal-info" style="background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:16px;border:1px solid var(--border)"></div>
+      <!-- índices -->
+      <div style="font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Selecione o índice</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px" id="reaj-modal-idx"></div>
+      <!-- percentual -->
+      <div class="fgp" style="margin-bottom:14px">
+        <label>Percentual de reajuste (%)</label>
+        <input type="number" class="reaj-big-input" id="reaj-modal-pct" step="0.01" min="0" placeholder="0,00" oninput="updateReajModalPreview()">
+      </div>
+      <!-- preview -->
+      <div id="reaj-modal-preview" style="background:var(--gl);border:1px solid var(--gm);border-radius:10px;padding:12px 14px;display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:11px;color:var(--sub);margin-bottom:2px">Novo valor</div>
+            <div style="font-size:22px;font-weight:700;color:var(--green)" id="reaj-modal-novo">—</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--sub);margin-bottom:2px">Acréscimo mensal</div>
+            <div style="font-size:16px;font-weight:700;color:var(--green)" id="reaj-modal-diff">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-ghost" onclick="closeReajModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarReajModal()"><i class="ti ti-check"></i> Aplicar reajuste</button>
+    </div>
+  </div>
+</div>
+
 <div id="cal-popup"></div>
 <div class="toast" id="toast"></div>
 
@@ -955,7 +994,7 @@ function render(){
   const ac=document.getElementById('alert-count');if(ac)ac.textContent=alertsData.length+' alerta'+(alertsData.length!==1?'s':'');
   const acard=document.getElementById('alerts-card');if(acard)acard.style.display=alertsData.length?'':'none';
   const abody=document.getElementById('alerts-body');
-  if(abody)abody.innerHTML=alertsData.map(c=>`<div class="alert-item"><div class="adot ${c.st==='vencido'?'r':'a'}"></div><div class="alert-main"><div class="alert-name">${c.cliente} — ${c.carro} <span class="mono" style="font-size:11px">${c.placa}</span></div><div class="alert-sub">Vence: ${fmtDate(c.vencimento)} · ${fmtBRL(c.valor)}/mês · ${c.tipo}</div></div><div class="alert-acts"><span class="badge ${c.st==='vencido'?'br':'ba'}">${c.st==='vencido'?Math.abs(c.dias)+'d atraso':c.dias+'d rest.'}</span><button class="actbtn cal" title="Cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button><button class="actbtn hist" title="Histórico" onclick="openHistModal(${c.id})"><i class="ti ti-history"></i></button><button class="actbtn" title="Editar" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button></div></div>`).join('');
+  if(abody)abody.innerHTML=alertsData.map(c=>`<div class="alert-item"><div class="adot ${c.st==='vencido'?'r':'a'}"></div><div class="alert-main"><div class="alert-name">${c.cliente} — ${c.carro} <span class="mono" style="font-size:11px">${c.placa}</span></div><div class="alert-sub">Vence: ${fmtDate(c.vencimento)} · ${fmtBRL(c.valor)}/mês · ${c.tipo}</div></div><div class="alert-acts"><span class="badge ${c.st==='vencido'?'br':'ba'}">${c.st==='vencido'?Math.abs(c.dias)+'d atraso':c.dias+'d rest.'}</span><button class="actbtn reaj" title="Reajustar" onclick="openReajModal(${c.id})"><i class="ti ti-percentage"></i></button><button class="actbtn cal" title="Cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button><button class="actbtn hist" title="Histórico" onclick="openHistModal(${c.id})"><i class="ti ti-history"></i></button><button class="actbtn" title="Editar" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button></div></div>`).join('');
 
   // Client filter
   const clientes=[...new Set(ALL.map(c=>c.cliente))].sort();
@@ -992,7 +1031,7 @@ function render(){
       let pr='';
       if(c.dt_reaj&&c.vencimento&&c.tipo!=='mensal'){const tot2=diffDias2(c.vencimento,c.dt_reaj),el=diffDias2(TODAY,c.dt_reaj);const pp=Math.max(0,Math.min(100,Math.round(el/tot2*100)));pr=`<div class="prog"><div class="prog-fill" style="width:${pp}%;background:${st==='vencido'?'var(--red)':st==='urgente'?'var(--amber)':'var(--green)'}"></div></div>`;}
       const rp=pct(c.valor,c.valor_ant);
-      return `<tr><td>${c.carro}</td><td class="mono">${c.placa}</td><td><span class="badge bx" style="font-size:10px">${c.tipo}</span></td><td>${fmtDate(c.dt_reaj)}</td><td>${fmtDate(c.vencimento)}${dh}${pr}</td><td style="color:var(--sub);font-size:12px">${c.valor_ant?fmtBRL(c.valor_ant):'—'}</td><td style="font-weight:600">${fmtBRL(c.valor)}${rp?`<div style="font-size:10px;color:var(--green);font-weight:500">+${rp}%</div>`:''}</td><td><span class="badge ${pill}">${ptxt}</span></td><td style="white-space:nowrap">${c.vencimento?`<button class="actbtn cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button>`:''}<button class="actbtn hist" onclick="openHistModal(${c.id})"><i class="ti ti-history"></i></button><button class="actbtn" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button>${c.id>=1000?`<button class="actbtn del" onclick="delContrato(${c.id})"><i class="ti ti-trash"></i></button>`:''}</td></tr>`;
+      return `<tr><td>${c.carro}</td><td class="mono">${c.placa}</td><td><span class="badge bx" style="font-size:10px">${c.tipo}</span></td><td>${fmtDate(c.dt_reaj)}</td><td>${fmtDate(c.vencimento)}${dh}${pr}</td><td style="color:var(--sub);font-size:12px">${c.valor_ant?fmtBRL(c.valor_ant):'—'}</td><td style="font-weight:600">${fmtBRL(c.valor)}${rp?`<div style="font-size:10px;color:var(--green);font-weight:500">+${rp}%</div>`:''}</td><td><span class="badge ${pill}">${ptxt}</span></td><td style="white-space:nowrap"><button class="actbtn reaj" title="Reajustar" onclick="openReajModal(${c.id})"><i class="ti ti-percentage"></i></button>${c.vencimento?`<button class="actbtn cal" onclick="exportSingleICS(${c.id})"><i class="ti ti-calendar-plus"></i></button>`:''}<button class="actbtn hist" onclick="openHistModal(${c.id})"><i class="ti ti-history"></i></button><button class="actbtn" onclick="openModal(${c.id})"><i class="ti ti-edit"></i></button>${c.id>=1000?`<button class="actbtn del" onclick="delContrato(${c.id})"><i class="ti ti-trash"></i></button>`:''}</td></tr>`;
     }).join('')}</tbody></table>`:''}
     </div>`;
   }).join('');
@@ -1211,7 +1250,82 @@ function toast(msg,type){const el=document.getElementById('toast');el.innerHTML=
 /* ══════════════════════════════════════════
    BOOT
 ══════════════════════════════════════════ */
-document.getElementById('search').addEventListener('input',render);
+/* ══════════════════════════════════════════
+   REAJUSTE RÁPIDO (por contrato)
+══════════════════════════════════════════ */
+let _reajModalId=null,_reajModalIdx=null;
+
+function openReajModal(id){
+  const c=allData().find(x=>x.id===id);if(!c)return;
+  _reajModalId=id;_reajModalIdx=null;
+  document.getElementById('reaj-modal-title').innerHTML=`<i class="ti ti-percentage" style="color:var(--purple)"></i> Reajuste rápido`;
+  document.getElementById('reaj-modal-info').innerHTML=`
+    <div style="font-size:13px;font-weight:600;margin-bottom:4px">${c.cliente} — ${c.carro} <span class="mono" style="font-size:11px;color:var(--sub)">${c.placa}</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+      <span class="badge bx" style="font-size:10px"><i class="ti ti-tag"></i> ${c.tipo}</span>
+      <span class="badge bx" style="font-size:10px">Atual: <strong>${fmtBRL(c.valor)}/mês</strong></span>
+      ${c.dt_reaj?`<span class="badge bx" style="font-size:10px">Último reaj.: ${fmtDate(c.dt_reaj)}</span>`:''}
+    </div>`;
+  // render index cards
+  const grid=document.getElementById('reaj-modal-idx');
+  grid.innerHTML=Object.entries(INDICES).map(([key,idx])=>`
+    <div onclick="selectReajModalIdx('${key}')" id="reaj-modal-card-${key}" style="border:2px solid var(--border);border-radius:9px;padding:10px 11px;cursor:pointer;transition:all .18s;text-align:center;background:#fff">
+      <div style="font-size:12px;font-weight:700;color:var(--text)">${idx.nome}</div>
+      <div style="font-size:18px;font-weight:700;color:${idx.cor};margin:3px 0">+${idx.acum12}%</div>
+      <div style="font-size:10px;color:var(--sub)">12 meses</div>
+    </div>`).join('');
+  document.getElementById('reaj-modal-pct').value='';
+  document.getElementById('reaj-modal-preview').style.display='none';
+  document.getElementById('overlay-reaj').classList.add('show');
+}
+
+function selectReajModalIdx(key){
+  _reajModalIdx=key;
+  Object.keys(INDICES).forEach(k=>{
+    const card=document.getElementById('reaj-modal-card-'+k);
+    if(!card)return;
+    const idx=INDICES[k];
+    if(k===key){card.style.border=`2px solid ${idx.cor}`;card.style.background=idx.cor+'18';}
+    else{card.style.border='2px solid var(--border)';card.style.background='#fff';}
+  });
+  document.getElementById('reaj-modal-pct').value=INDICES[key].acum12;
+  updateReajModalPreview();
+}
+
+function updateReajModalPreview(){
+  const c=allData().find(x=>x.id===_reajModalId);if(!c)return;
+  const p=parseFloat(document.getElementById('reaj-modal-pct').value||0);
+  const prev=document.getElementById('reaj-modal-preview');
+  if(!p){prev.style.display='none';return;}
+  const novo=+(c.valor*(1+p/100)).toFixed(2);
+  const diff=+(novo-c.valor).toFixed(2);
+  document.getElementById('reaj-modal-novo').textContent=fmtBRL(novo)+'/mês';
+  document.getElementById('reaj-modal-diff').textContent='+'+fmtBRL(diff);
+  prev.style.display='block';
+}
+
+function closeReajModal(){document.getElementById('overlay-reaj').classList.remove('show');}
+
+function confirmarReajModal(){
+  const c=allData().find(x=>x.id===_reajModalId);if(!c)return;
+  const p=parseFloat(document.getElementById('reaj-modal-pct').value||0);
+  if(!p){toast('Insira um percentual de reajuste.','red');return;}
+  const novoValor=+(c.valor*(1+p/100)).toFixed(2);
+  const idxName=_reajModalIdx?INDICES[_reajModalIdx].nome:'Manual';
+  HIST.push({id:Date.now()+Math.random(),contratoId:c.id,cliente:c.cliente,carro:c.carro,placa:c.placa,valor_ant:c.valor,valor_novo:novoValor,pct:p,data:TODAY,tipo:c.tipo,indice:idxName});
+  const extraIdx=EXTRA.findIndex(x=>x.id===c.id);
+  if(extraIdx>=0){EXTRA[extraIdx]={...EXTRA[extraIdx],valor_ant:c.valor,valor:novoValor,dt_reaj:new Date(TODAY)};}
+  else{EXTRA.push({...c,id:c.id>=1000?c.id:(nextId++),valor_ant:c.valor,valor:novoValor,dt_reaj:new Date(TODAY)});}
+  saveExtra();saveHist();
+  closeReajModal();
+  toast(`Reajuste de +${p}% aplicado a ${c.carro} (${c.placa})!`,'green');
+  render();
+  if(activeTab==='reajuste')updatePreview();
+}
+
+document.getElementById('overlay-reaj').addEventListener('click',function(e){if(e.target===this)closeReajModal();});
+
+
 document.getElementById('filterStatus').addEventListener('change',render);
 document.getElementById('filterCliente').addEventListener('change',render);
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
