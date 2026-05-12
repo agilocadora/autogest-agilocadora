@@ -814,9 +814,15 @@ function handleReajTargetChange(val){
   wrap.style.display = val==='individual' ? 'block' : 'none';
   if(val==='individual'){
     const ALL = allData();
-    const sel = document.getElementById('reaj-target-individual');
-    sel.innerHTML = '<option value="">— Selecione o contrato —</option>' +
+    const opts = '<option value="">— Selecione o contrato —</option>' +
       ALL.map(c=>`<option value="${c.id}">${c.cliente} — ${c.carro} (${c.placa}) · ${fmtBRL(c.valor)}/mês</option>`).join('');
+    document.getElementById('reaj-target-individual').innerHTML = opts;
+    // também preenche o select mobile se existir
+    const mobInd = document.getElementById('mob-reaj-individual');
+    if(mobInd){ mobInd.innerHTML = opts; mobInd.style.display = 'block'; }
+  } else {
+    const mobInd = document.getElementById('mob-reaj-individual');
+    if(mobInd) mobInd.style.display = 'none';
   }
   updatePreview();
 }
@@ -1211,8 +1217,11 @@ function renderMobReajuste(){
   </div>
   <div style="margin-bottom:10px">
     <label style="font-size:12px;font-weight:600;color:var(--sub);display:block;margin-bottom:5px">Aplicar a</label>
-    <select class="flt" style="width:100%" onchange="document.getElementById('reaj-target').value=this.value;updatePreview()">
+    <select class="flt" style="width:100%" onchange="handleReajTargetChange(this.value);document.getElementById('reaj-target').value=this.value" id="mob-reaj-target">
       <option value="todos">Todos os contratos</option><option value="mensal">Somente mensais</option><option value="anuais">Somente anuais</option><option value="vencidos">Vencidos / urgentes</option><option value="individual">Contrato individual</option>
+    </select>
+    <select class="flt" style="width:100%;margin-top:7px;display:none" id="mob-reaj-individual" onchange="document.getElementById('reaj-target-individual').value=this.value;updatePreview()">
+      <option value="">— Selecione o contrato —</option>
     </select>
   </div>
   <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="aplicarReajuste()"><i class="ti ti-check"></i> Aplicar reajuste</button>`;
