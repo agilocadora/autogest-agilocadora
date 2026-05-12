@@ -176,7 +176,7 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
 .reaj-panel-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
 .reaj-panel-body{padding:18px}
 /* Index card grid */
-.idx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.idx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .idx-card{border:2px solid var(--border);border-radius:10px;padding:13px 14px;cursor:pointer;transition:all .2s;position:relative;background:#fff}
 .idx-card:hover{border-color:var(--blue);background:var(--bl)}
 .idx-card.selected{border-color:var(--blue);background:var(--bl);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
@@ -322,7 +322,6 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
   <div class="tr">
     <button class="btn btn-ghost btn-sm" onclick="openTab('reajuste')"><i class="ti ti-calculator"></i> Calcular Reajuste</button>
     <button class="btn btn-ghost btn-sm" onclick="openSyncModal()"><i class="ti ti-calendar-event"></i> Sincronizar</button>
-    <button class="btn btn-primary btn-sm" onclick="openModal()"><i class="ti ti-plus"></i> Novo contrato</button>
   </div>
 </div>
 
@@ -460,9 +459,13 @@ input:focus,select.fsel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba
               <option value="anuais">Somente anuais</option>
               <option value="vencidos">Vencidos / urgentes</option>
               <option value="cliente">Por cliente</option>
+              <option value="individual">Contrato individual</option>
             </select>
             <select class="fsel" id="reaj-target-cliente" style="display:none;margin-top:6px" onchange="updatePreview()">
               <option value="">Selecione o cliente</option>
+            </select>
+            <select class="fsel" id="reaj-target-individual" style="display:none;margin-top:6px" onchange="updatePreview()">
+              <option value="">Selecione o contrato</option>
             </select>
           </div>
         </div>
@@ -621,16 +624,6 @@ const INDICES={
     mensal:[0.83,0.83,0.83,0.83,0.83,0.92,0.92,0.92,1.03,0.92,1.06,1.00],
     acum12:null,src:'Banco Central'
   },
-  ipva:{
-    nome:'IPVA',full:'Índice de Reajuste IPVA (ref. SP)',cor:'#D97706',
-    mensal:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.67,0.0,0.0,0.0,0.0],
-    acum12:null,src:'SEFAZ-SP'
-  },
-  inpc:{
-    nome:'INPC',full:'Índice Nacional de Preços ao Consumidor',cor:'#0891B2',
-    mensal:[0.51,0.17,0.28,0.55,0.48,0.56,0.33,0.48,0.51,1.27,0.23,0.20],
-    acum12:null,src:'IBGE'
-  },
 };
 
 // Compute accumulated 12 months
@@ -726,6 +719,13 @@ function renderReauste(){
   const sel=document.getElementById('reaj-target-cliente');
   if(sel){sel.innerHTML='<option value="">Selecione o cliente</option>'+clientes.map(cl=>`<option value="${cl}">${cl}</option>`).join('');}
 
+  // Populate individual contract selector
+  const selInd=document.getElementById('reaj-target-individual');
+  if(selInd){
+    const ALL=allData();
+    selInd.innerHTML='<option value="">Selecione o contrato</option>'+ALL.map(c=>`<option value="${c.id}">${c.cliente} — ${c.carro} (${c.placa}) · ${fmtBRL(c.valor)}/mês</option>`).join('');
+  }
+
   grid.innerHTML=Object.entries(INDICES).map(([key,idx])=>{
     const isSel=selectedIdx===key;
     const maxM=Math.max(...idx.mensal);
@@ -769,6 +769,7 @@ function selectIdx(key){
 
 document.getElementById('reaj-target').addEventListener('change',function(){
   document.getElementById('reaj-target-cliente').style.display=this.value==='cliente'?'block':'none';
+  document.getElementById('reaj-target-individual').style.display=this.value==='individual'?'block':'none';
   updatePreview();
 });
 
@@ -776,11 +777,13 @@ function getTargetContracts(){
   const ALL=allData();
   const target=document.getElementById('reaj-target')?.value||'todos';
   const cl=document.getElementById('reaj-target-cliente')?.value||'';
+  const indId=parseInt(document.getElementById('reaj-target-individual')?.value||'');
   if(target==='todos')return ALL;
   if(target==='mensal')return ALL.filter(c=>c.tipo==='mensal');
   if(target==='anuais')return ALL.filter(c=>c.tipo!=='mensal');
   if(target==='vencidos')return ALL.filter(c=>['vencido','urgente'].includes(getStatus(c)));
   if(target==='cliente')return ALL.filter(c=>c.cliente===cl);
+  if(target==='individual')return indId?ALL.filter(c=>c.id===indId):[];
   return ALL;
 }
 
@@ -1159,7 +1162,7 @@ function renderMobReajuste(){
   <div style="margin-bottom:10px">
     <label style="font-size:12px;font-weight:600;color:var(--sub);display:block;margin-bottom:5px">Aplicar a</label>
     <select class="flt" style="width:100%" onchange="document.getElementById('reaj-target').value=this.value;updatePreview()">
-      <option value="todos">Todos os contratos</option><option value="mensal">Somente mensais</option><option value="anuais">Somente anuais</option><option value="vencidos">Vencidos / urgentes</option>
+      <option value="todos">Todos os contratos</option><option value="mensal">Somente mensais</option><option value="anuais">Somente anuais</option><option value="vencidos">Vencidos / urgentes</option><option value="individual">Contrato individual</option>
     </select>
   </div>
   <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="aplicarReajuste()"><i class="ti ti-check"></i> Aplicar reajuste</button>`;
