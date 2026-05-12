@@ -807,10 +807,20 @@ function selectIdx(key){
 }
 
 document.getElementById('reaj-target').addEventListener('change',function(){
-  document.getElementById('reaj-target-cliente').style.display=this.value==='cliente'?'block':'none';
-  document.getElementById('reaj-target-individual').style.display=this.value==='individual'?'block':'none';
+  const isCliente = this.value === 'cliente';
+  const isInd = this.value === 'individual';
+  document.getElementById('reaj-target-cliente').style.display = isCliente ? 'block' : 'none';
+  const selInd = document.getElementById('reaj-target-individual');
+  selInd.style.display = isInd ? 'block' : 'none';
+  if(isInd){
+    const ALL = allData();
+    selInd.innerHTML = '<option value="">— Selecione o contrato —</option>' +
+      ALL.map(c => `<option value="${c.id}">${c.cliente} — ${c.carro} (${c.placa}) · ${fmtBRL(c.valor)}/mês</option>`).join('');
+  }
   updatePreview();
 });
+
+document.getElementById('reaj-target-individual').addEventListener('change', updatePreview);
 
 function getTargetContracts(){
   const ALL=allData();
