@@ -26192,7 +26192,7 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
 
   var CAMPOS = {
     clientes: [
-      { k:"nome",              label:"Cliente *",              aliases:["cliente","nome","name","locatário","locatario"] },
+      { k:"nome",              label:"Cliente",                aliases:["cliente","nome","name","locatário","locatario"] },
       { k:"cpf",               label:"CPF/Passaporte",         aliases:["cpf/passaporte","cpf","cnpj","passaporte","documento","doc","cpf/cnpj"] },
       { k:"sexo",              label:"Sexo",                   aliases:["sexo","gênero","genero","sex","gender"] },
       { k:"rg",                label:"RG",                     aliases:["rg","identidade","registro geral"] },
@@ -26209,19 +26209,18 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
       { k:"telefone",          label:"Fone Residencial",       aliases:["fone residencial","telefone residencial","fone res","telefone","fone","tel","phone"] },
       { k:"celular",           label:"Celular",                aliases:["celular","cel","whatsapp","mobile","fone celular"] },
       { k:"outro_fone",        label:"Outro Fone",             aliases:["outro fone","outros fones","outro telefone","fone alternativo","tel alternativo"] },
-      { k:"endereco_comercial",label:"Endereço Comercial",     aliases:["endereço comercial","endereco comercial","end. comercial","endereço comercial"] },
-      { k:"num_comercial",     label:"Num. Comercial",         aliases:["num. comercial","numero comercial","nº comercial"] },
-      { k:"complemento_com",   label:"Complemento Comercial",  aliases:["complemento comercial","compl. comercial"] },
-      { k:"bairro_comercial",  label:"Bairro Comercial",       aliases:["bairro comercial"] },
-      { k:"cep_comercial",     label:"CEP Comercial",          aliases:["cep comercial"] },
-      { k:"cidade_comercial",  label:"Cidade Comercial",       aliases:["cidade comercial"] },
-      { k:"uf_comercial",      label:"Estado Comercial",       aliases:["estado comercial","uf comercial"] },
+      { k:"endereco_comercial",label:"Endereço Comercial",     aliases:["endereço comercial","endereco comercial","end. comercial"] },
+      { k:"num_comercial",     label:"Num.",                   aliases:["num. comercial","numero comercial","nº comercial"] },
+      { k:"complemento_com",   label:"Complemento",            aliases:["complemento comercial","compl. comercial"] },
+      { k:"bairro_comercial",  label:"Bairro",                 aliases:["bairro comercial"] },
+      { k:"cep_comercial",     label:"CEP",                    aliases:["cep comercial"] },
+      { k:"cidade_comercial",  label:"Cidade",                 aliases:["cidade comercial"] },
+      { k:"uf_comercial",      label:"Estado",                 aliases:["estado comercial","uf comercial"] },
       { k:"fone_comercial",    label:"Fone Comercial",         aliases:["fone comercial","telefone comercial","tel comercial","fone com."] },
       { k:"cnh",               label:"Carteira de Motorista CNH", aliases:["carteira de motorista cnh","carteira de motorista","cnh","habilitação","habilitacao","nro cnh","nº cnh","numero cnh"] },
       { k:"prontuario",        label:"Prontuário",             aliases:["prontuário","prontuario"] },
       { k:"cnh_categoria",     label:"Categoria CNH",          aliases:["categoria cnh","categoria","cat. cnh","cat cnh"] },
       { k:"cnh_validade",      label:"Validade CNH",           aliases:["validade cnh","venc cnh","venc. cnh","validade habilitação","validade cnh"] },
-      { k:"obs",               label:"Observações",            aliases:["obs","observações","observacoes","notas","nota"] },
     ],
     veiculos: [
       { k:"placa",        label:"Placa *",           aliases:["placa","plate","placa do veículo","placa veiculo"] },
@@ -26278,12 +26277,15 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
         setHeaders(hdrs);
         setRows(dataRows);
         var autoMap = {};
+        var usedCols = {};
         CAMPOS[entidade].forEach(function(campo) {
           for (var i = 0; i < hdrs.length; i++) {
             if (autoMap[campo.k] !== undefined) break;
+            if (usedCols[i]) continue;
             var hn = hdrs[i].toLowerCase().trim();
             if (campo.aliases.some(function(a){ return hn === a || hn.includes(a) || a.includes(hn); })) {
               autoMap[campo.k] = String(i);
+              usedCols[i] = true;
             }
           }
         });
@@ -26335,7 +26337,7 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
           if (getVal("sexo"))              p.sexo              = getVal("sexo");
           if (getVal("rg"))                p.rg                = getVal("rg");
           if (getVal("data_nascimento"))   p.nascimento        = parseDate(getVal("data_nascimento")) || getVal("data_nascimento");
-          if (getVal("email"))             p.email             = getVal("email").toLowerCase();
+          if (getVal("email"))             p.email             = getVal("email");
           if (getVal("nacionalidade"))     p.nacionalidade     = getVal("nacionalidade");
           if (getVal("endereco"))          p.endereco          = getVal("endereco");
           if (getVal("numero_end"))        p.numero_end        = getVal("numero_end");
