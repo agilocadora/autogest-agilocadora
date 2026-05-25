@@ -26371,7 +26371,7 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
           var p = { placa:placa, status:"disponivel" };
           if (getVal("modelo")) p.modelo = getVal("modelo");
           if (getVal("km_atual")) p.km_atual = parseInt(getVal("km_atual"))||null;
-          if (getVal("combustivel")) p.combustivel = getVal("combustivel");
+          if (getVal("combustivel")) p.combustivel = getVal("combustivel").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
           if (getVal("grupo")) p.grupo = getVal("grupo");
           if (getVal("cor")) p.cor = getVal("cor");
           if (getVal("chassi")) p.chassi = getVal("chassi");
