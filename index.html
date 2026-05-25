@@ -26225,16 +26225,17 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
     ],
     veiculos: [
       { k:"placa",        label:"Placa *",           aliases:["placa","plate","placa do veículo","placa veiculo"] },
-      { k:"marca",        label:"Marca",             aliases:["marca","fabricante","make","brand"] },
-      { k:"modelo",       label:"Modelo",            aliases:["modelo","model","versão","versao"] },
-      { k:"ano",          label:"Ano",               aliases:["ano","ano/mod","ano fabricação","ano mod","year","ano fab"] },
-      { k:"cor",          label:"Cor",               aliases:["cor","color","colour"] },
-      { k:"renavam",      label:"Renavam",           aliases:["renavam","renavam/chassi"] },
-      { k:"chassi",       label:"Chassi",            aliases:["chassi","chassis","vin","nº chassi"] },
+      { k:"modelo",       label:"Modelo",            aliases:["modelo","model","versão","versao","modelo veículo","modelo veiculo"] },
+      { k:"km_atual",     label:"Km Atual",          aliases:["km atual","km","quilometragem","odometer","odômetro","km inicial"] },
       { k:"combustivel",  label:"Combustível",       aliases:["combustível","combustivel","fuel","tipo combustível"] },
+      { k:"grupo",        label:"Grupo",             aliases:["grupo","group","categoria","category","classe","class"] },
+      { k:"cor",          label:"Cor",               aliases:["cor","color","colour"] },
+      { k:"chassi",       label:"Chassi",            aliases:["chassi","chassis","vin","nº chassi"] },
+      { k:"renavam",      label:"Renavam",           aliases:["renavam","renavam/chassi"] },
+      { k:"ano",          label:"Ano Veículo",       aliases:["ano veículo","ano veiculo","ano","ano/mod","ano fabricação","ano mod","year","ano fab"] },
+      { k:"marca",        label:"Modelo Veículo",    aliases:["modelo veículo","modelo veiculo","marca","fabricante","make","brand"] },
       { k:"valor_diaria", label:"Diária (R$)",       aliases:["diária","diaria","valor diária","valor diaria","price/day","valor/dia"] },
       { k:"valor_mensal", label:"Mensal (R$)",       aliases:["mensal","valor mensal","monthly","valor/mes","valor mês"] },
-      { k:"km_atual",     label:"KM Atual",          aliases:["km","quilometragem","km atual","odometer","odômetro","km inicial"] },
       { k:"obs",          label:"Observações",       aliases:["obs","observações","observacoes","notas"] },
     ],
     contratos: [
@@ -26366,16 +26367,17 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
           var placa = getVal("placa").toUpperCase().replace(/[^A-Z0-9]/g,"");
           if (!placa) { erros.push("Linha "+(i+2)+": Placa obrigatória"); continue; }
           var p = { placa:placa, status:"disponivel" };
-          if (getVal("marca")) p.marca = getVal("marca");
           if (getVal("modelo")) p.modelo = getVal("modelo");
-          if (getVal("ano")) p.ano = parseInt(getVal("ano"))||null;
-          if (getVal("cor")) p.cor = getVal("cor");
-          if (getVal("renavam")) p.renavam = getVal("renavam");
-          if (getVal("chassi")) p.chassi = getVal("chassi");
+          if (getVal("km_atual")) p.km_atual = parseInt(getVal("km_atual"))||null;
           if (getVal("combustivel")) p.combustivel = getVal("combustivel");
+          if (getVal("grupo")) p.grupo = getVal("grupo");
+          if (getVal("cor")) p.cor = getVal("cor");
+          if (getVal("chassi")) p.chassi = getVal("chassi");
+          if (getVal("renavam")) p.renavam = getVal("renavam");
+          if (getVal("ano")) p.ano = parseInt(getVal("ano"))||null;
+          if (getVal("marca")) p.marca = getVal("marca");
           if (getVal("valor_diaria")) p.valor_diaria = parseMoney(getVal("valor_diaria"));
           if (getVal("valor_mensal")) p.valor_mensal = parseMoney(getVal("valor_mensal"));
-          if (getVal("km_atual")) p.km_atual = parseInt(getVal("km_atual"))||null;
           if (getVal("obs")) p.obs = getVal("obs");
           var novo = await db.post("veiculos", p);
           setVeiculos(function(prev){ return [novo].concat(prev); });
