@@ -26332,9 +26332,22 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
     if (!v) return null;
     if (v instanceof Date) return v.toISOString().split("T")[0];
     var s = String(v).replace(/\xa0|\u00a0/g, "").trim();
+    // DD/MM/AAAA ou DD/MM/AA
     var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
     if (m) { var y = m[3].length===2?"20"+m[3]:m[3]; return y+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0"); }
+    // AAAA-MM-DD (ISO)
     if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+    // Formato JS longo: "Thu Apr 30 2026 17:35:00..." ou "Thu Apr 30 2026"
+    var mLong = s.match(/([A-Za-z]{3})\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/);
+    if (mLong) {
+      var months = {jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"};
+      var mo = months[(mLong[2]||"").toLowerCase()];
+      if (mo) return mLong[4]+"-"+mo+"-"+mLong[3].padStart(2,"0");
+    }
+    // Formato ISO completo com T: "2026-04-30T17:35:00..."
+    var mISO = s.match(/^(\d{4}-\d{2}-\d{2})T/);
+    if (mISO) return mISO[1];
+    // Número serial Excel
     var n = parseFloat(s);
     if (!isNaN(n) && n > 10000) { var d = new Date((n-25569)*86400000); return d.toISOString().split("T")[0]; }
     return null;
