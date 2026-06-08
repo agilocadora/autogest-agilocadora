@@ -26238,15 +26238,48 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
       { k:"obs",          label:"Observações",       aliases:["obs","observações","observacoes","notas"] },
     ],
     contratos: [
-      { k:"_cliente_nome",  label:"Cliente (Nome/CPF) *", aliases:["cliente","locatário","locatario","nome cliente","condutor","cpf cliente"] },
-      { k:"_veiculo_placa", label:"Veículo (Placa) *",    aliases:["placa","veículo","veiculo","carro","placa veículo","placa do veículo"] },
-      { k:"data_inicio",    label:"Data Início *",         aliases:["data início","data inicio","início","retirada","data retirada","check-in","from","saída","saida"] },
-      { k:"data_fim",       label:"Data Fim *",            aliases:["data fim","devolução","devolucao","data devolução","check-out","to","até","retorno"] },
-      { k:"valor_total",    label:"Valor Total (R$)",      aliases:["valor","valor total","total","preço","preco","price","valor locação"] },
-      { k:"km_saida",       label:"KM Saída",              aliases:["km saída","km saida","km inicial","km retirada","km saída","hodômetro saída"] },
-      { k:"km_franquia",    label:"KM Franquia",           aliases:["km franquia","franquia","km/dia","km diário","km contratado"] },
-      { k:"forma_pagamento",label:"Forma Pagamento",       aliases:["pagamento","forma pagamento","forma de pagamento","payment","meio pagamento"] },
-      { k:"obs",            label:"Observações",           aliases:["obs","observações","observacoes","notas"] },
+      { k:"status_contrato",   label:"Status",                aliases:["status"] },
+      { k:"numero_contrato",   label:"Número",                aliases:["número","numero","nº","contrato","nº contrato","numero contrato"] },
+      { k:"tipo_contrato",     label:"Tipo",                  aliases:["tipo","type","tipo contrato","modalidade"] },
+      { k:"_cliente_nome",     label:"Cliente (Nome/CPF) *",  aliases:["cliente","locatário","locatario","nome cliente","condutor","cpf cliente"] },
+      { k:"grupo_veiculo",     label:"Grupo Veículo",         aliases:["grupo","group","categoria","classe"] },
+      { k:"_veiculo_placa",    label:"Veículo (Placa) *",     aliases:["placa","veículo","veiculo","carro","placa veículo","placa do veículo"] },
+      { k:"modelo_veiculo",    label:"Modelo Veículo",        aliases:["modelo","modelo veículo","modelo veiculo","model"] },
+      { k:"data_inicio",       label:"Data Saída *",          aliases:["saída","saida","data início","data inicio","início","retirada","data retirada","check-in","from"] },
+      { k:"data_fim",          label:"Data Retorno *",        aliases:["retorno","devolução","devolucao","data fim","data devolução","check-out","to","até"] },
+      { k:"km_franquia",       label:"KM Franquia",           aliases:["franquia","km franquia","km/dia","km diário","km contratado"] },
+      { k:"tabela_preco",      label:"Tabela",                aliases:["tabela","tabela preço","tabela preco","price table","tarifa"] },
+      { k:"km_total_rodado",   label:"KM Total Rodado",       aliases:["km total rodado","km total","total km","quilometragem total"] },
+      { k:"km_saida",          label:"KM Inicial",            aliases:["km inicial","km saída","km saida","km retirada","hodômetro saída"] },
+      { k:"km_retorno",        label:"KM Final",              aliases:["km final","km retorno","km devolução","km devol","hodômetro retorno"] },
+      { k:"endereco_cliente",  label:"Endereço Cliente",      aliases:["endereço cliente","endereco cliente","end. cliente","endereço","endereco"] },
+      { k:"telefone_cliente",  label:"Telefones Cliente",     aliases:["telefones cliente","telefone cliente","fone cliente","tel cliente","telefone","fone","tel"] },
+      { k:"email_cliente",     label:"Email Cliente",         aliases:["email cliente","e-mail cliente","email","e-mail","mail"] },
+      { k:"estado_cliente",    label:"Estado Cliente",        aliases:["estado","uf","estado cliente","uf cliente"] },
+      { k:"cidade_cliente",    label:"Cidade Cliente",        aliases:["cidade","município","municipio","cidade cliente"] },
+      { k:"cnpj_cliente",      label:"CNPJ",                  aliases:["cnpj","cnpj cliente","cpf/cnpj"] },
+      { k:"motorista",         label:"Motorista",             aliases:["motorista","driver","condutor adicional"] },
+      { k:"qtd_diarias",       label:"Qtd. Diárias",          aliases:["qtd. diarias","qtd diarias","quantidade diarias","diarias","dias","days"] },
+      { k:"vlr_diaria",        label:"Vlr. Diária",           aliases:["vlr. diaria","vlr diaria","valor diaria","valor diária","diaria","diária"] },
+      { k:"tot_diaria",        label:"Tot. Diária",           aliases:["tot. diaria","tot diaria","total diaria","total diária","subtotal diaria"] },
+      { k:"hora_extra",        label:"Hora Extra",            aliases:["hora extra","horas extras","hora adicional","extra hour"] },
+      { k:"km_excedente",      label:"KM Excedente",          aliases:["km excedente","km exc","excedente km","km extra"] },
+      { k:"vlr_km_excedente",  label:"Vlr. KM Excedente",    aliases:["valor km excedente","vlr km excedente","vlr. km excedente","valor km exc"] },
+      { k:"tot_km_excedente",  label:"Total KM Excedente",   aliases:["valor total km excedente","total km excedente","tot km excedente","tot. km excedente"] },
+      { k:"comb_adicional",    label:"Comb. Adicional",       aliases:["comb. adicional","combustivel adicional","comb adicional","fuel extra"] },
+      { k:"desconto",          label:"Desconto",              aliases:["desconto","discount","abatimento"] },
+      { k:"vlr_tx_servico",    label:"Vlr. Tx. Serviço",     aliases:["vlr.tx.serv.","vlr tx serv","valor taxa servico","taxa serviço","taxa servico","tx. serviço"] },
+      { k:"valor_total",       label:"Vlr. Final",            aliases:["vlr. final","vlr final","valor final","valor total","total","preço","preco","price","valor locação"] },
+      { k:"seguro_terceiros",  label:"Seguro Terceiros",      aliases:["seguro terceiros","seguro","insurance","proteção terceiros"] },
+      { k:"avarias",           label:"Avarias",               aliases:["avarias","avaria","danos","damage"] },
+      { k:"franquia_seguro",   label:"Franquia Seguro",       aliases:["franquia seguro","franquia sinistro","deductible"] },
+      { k:"lucros_cessantes",  label:"Lucros Cessantes",      aliases:["lucros cessantes","lucro cessante","loss of profit"] },
+      { k:"debito",            label:"Débito",                aliases:["débito","debito","debit","valor débito"] },
+      { k:"credito",           label:"Crédito",               aliases:["crédito","credito","credit","valor crédito"] },
+      { k:"credito_parcelado", label:"Crédito Parcelado",     aliases:["crédito parcelado","credito parcelado","parcelado","installment"] },
+      { k:"faturamento",       label:"Faturamento",           aliases:["faturamento","fatura","invoice","nota fiscal","nf"] },
+      { k:"forma_pagamento",   label:"Forma Pagamento",       aliases:["pagamento","forma pagamento","forma de pagamento","payment","meio pagamento"] },
+      { k:"obs",               label:"Observações",           aliases:["obs","observações","observacoes","notas"] },
     ],
   };
 
@@ -26394,14 +26427,46 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
           var ve = veiculoRef ? veiculos.find(function(v){ return (v.placa||"").replace(/[^A-Z0-9]/gi,"").toUpperCase() === veiculoRef.replace(/[^A-Z0-9]/gi,"").toUpperCase(); }) : null;
           if (!cl && clienteRef) { erros.push("Linha "+(i+2)+": Cliente '"+clienteRef+"' não encontrado. Importe clientes primeiro."); continue; }
           if (!ve && veiculoRef) { erros.push("Linha "+(i+2)+": Veículo '"+veiculoRef+"' não encontrado. Importe veículos primeiro."); continue; }
-          var p = { data_inicio:dataIni, data_fim:dataFim, status:"concluido", status_pagamento:"pendente" };
+          var statusImp = getVal("status_contrato");
+          var p = {
+            data_inicio: dataIni,
+            data_fim: dataFim,
+            status: statusImp || "concluido",
+            status_pagamento: "pendente"
+          };
           if (cl) p.cliente_id = cl.id;
           if (ve) p.veiculo_id = ve.id;
-          if (getVal("valor_total")) p.valor_total = parseMoney(getVal("valor_total"));
-          if (getVal("km_saida")) p.km_saida = parseInt(getVal("km_saida"))||null;
-          if (getVal("km_franquia")) p.km_franquia = parseInt(getVal("km_franquia"))||null;
-          if (getVal("forma_pagamento")) p.forma_pagamento = getVal("forma_pagamento");
-          if (getVal("obs")) p.obs = getVal("obs");
+          if (getVal("numero_contrato"))   p.numero_contrato   = getVal("numero_contrato");
+          if (getVal("tipo_contrato"))     p.tipo_contrato     = getVal("tipo_contrato");
+          if (getVal("grupo_veiculo"))     p.grupo             = getVal("grupo_veiculo");
+          if (getVal("modelo_veiculo"))    p.modelo_importado  = getVal("modelo_veiculo");
+          if (getVal("tabela_preco"))      p.tabela_preco      = getVal("tabela_preco");
+          if (getVal("km_saida"))          p.km_saida          = parseInt(getVal("km_saida"))||null;
+          if (getVal("km_retorno"))        p.km_retorno        = parseInt(getVal("km_retorno"))||null;
+          if (getVal("km_total_rodado"))   p.km_total_rodado   = parseInt(getVal("km_total_rodado"))||null;
+          if (getVal("km_franquia"))       p.km_franquia       = parseInt(getVal("km_franquia"))||null;
+          if (getVal("km_excedente"))      p.km_excedente      = parseInt(getVal("km_excedente"))||null;
+          if (getVal("motorista"))         p.motorista         = getVal("motorista");
+          if (getVal("qtd_diarias"))       p.qtd_diarias       = parseFloat(getVal("qtd_diarias"))||null;
+          if (getVal("vlr_diaria"))        p.vlr_diaria        = parseMoney(getVal("vlr_diaria"));
+          if (getVal("tot_diaria"))        p.tot_diaria        = parseMoney(getVal("tot_diaria"));
+          if (getVal("hora_extra"))        p.hora_extra        = parseMoney(getVal("hora_extra"));
+          if (getVal("vlr_km_excedente"))  p.vlr_km_excedente  = parseMoney(getVal("vlr_km_excedente"));
+          if (getVal("tot_km_excedente"))  p.tot_km_excedente  = parseMoney(getVal("tot_km_excedente"));
+          if (getVal("comb_adicional"))    p.comb_adicional    = parseMoney(getVal("comb_adicional"));
+          if (getVal("desconto"))          p.desconto          = parseMoney(getVal("desconto"));
+          if (getVal("vlr_tx_servico"))    p.vlr_tx_servico    = parseMoney(getVal("vlr_tx_servico"));
+          if (getVal("valor_total"))       p.valor_total       = parseMoney(getVal("valor_total"));
+          if (getVal("seguro_terceiros"))  p.seguro_terceiros  = parseMoney(getVal("seguro_terceiros"));
+          if (getVal("avarias"))           p.avarias           = parseMoney(getVal("avarias"));
+          if (getVal("franquia_seguro"))   p.franquia_seguro   = parseMoney(getVal("franquia_seguro"));
+          if (getVal("lucros_cessantes"))  p.lucros_cessantes  = parseMoney(getVal("lucros_cessantes"));
+          if (getVal("debito"))            p.debito            = parseMoney(getVal("debito"));
+          if (getVal("credito"))           p.credito           = parseMoney(getVal("credito"));
+          if (getVal("credito_parcelado")) p.credito_parcelado = parseMoney(getVal("credito_parcelado"));
+          if (getVal("faturamento"))       p.faturamento       = getVal("faturamento");
+          if (getVal("forma_pagamento"))   p.forma_pagamento   = getVal("forma_pagamento");
+          if (getVal("obs"))               p.obs               = getVal("obs");
           var novo = await db.post("contratos", p);
           setContratos(function(prev){ return [novo].concat(prev); });
           inseridos++;
