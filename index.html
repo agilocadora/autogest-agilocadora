@@ -26298,7 +26298,7 @@ function ImportarDados({ veiculos, setVeiculos, clientes, setClientes, contratos
   function parseDate(v) {
     if (!v) return null;
     if (v instanceof Date) return v.toISOString().split("T")[0];
-    var s = String(v).trim();
+    var s = String(v).replace(/\xa0|\u00a0/g, "").trim();
     var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
     if (m) { var y = m[3].length===2?"20"+m[3]:m[3]; return y+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0"); }
     if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
